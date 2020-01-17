@@ -15,14 +15,16 @@ import anyvsl_rus
 
 class intro_window(QWidget):
     def __init__(self, parent=None):
+        """Начальное окно с опциями выбора дальнейшей модели расчета"""
         super(intro_window, self).__init__(parent)
-        self.setObjectName("MainWindow")
-        self.setMinimumSize(QSize(400, 300))
-        self.setWindowTitle("Draft Survey")
+        # self.setObjectName("MainWindow")
+        # self.setMinimumSize(QSize(400, 300))
+        # self.setWindowTitle("Draft Survey")
 
         self.uintr = Ui_Draft_survey()
         self.uintr.setupUi(self)
 
+        # запуск основного окна в зависимости от нажатой кнопки
         self.uintr.start_btn.clicked.connect(self.launch_main_window)
 
     def launch_main_window(self):
