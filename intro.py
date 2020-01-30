@@ -13,41 +13,44 @@ import anyvsl_eng
 import anyvsl_rus
 
 
-class intro_window(QWidget):
+class IntroWindow(QWidget):
     def __init__(self, parent=None):
         """Начальное окно с опциями выбора дальнейшей модели расчета"""
-        super(intro_window, self).__init__(parent)
+        super(IntroWindow, self).__init__(parent)
         # self.setObjectName("MainWindow")
         # self.setMinimumSize(QSize(400, 300))
         # self.setWindowTitle("Draft Survey")
 
-        self.uintr = Ui_Draft_survey()
-        self.uintr.setupUi(self)
+        self.ui_intro = Ui_Draft_survey()
+        self.ui_intro.setupUi(self)  # использование модуля с настройками интерфейса программы
 
         # запуск основного окна в зависимости от нажатой кнопки
-        self.uintr.start_btn.clicked.connect(self.launch_main_window)
+        self.ui_intro.letsgo_btn.clicked.connect(self.launch_main_window)
 
     def launch_main_window(self):
-                if self.uintr.radiobtn_eng.isChecked() and self.uintr.radiobtn_bealuna.isChecked():
-                    self.main_win = bealuna_eng.mainwindow_eng()
-                    self.main_win.show()
-                    self.close()
-                elif self.uintr.radiobtn_rus.isChecked() and self.uintr.radiobtn_bealuna.isChecked():
-                    self.main_win = bealuna_rus.mainwindow_rus()
-                    self.main_win.show()
-                    self.close()
-                elif self.uintr.radiobtn_eng.isChecked() and self.uintr.radiobtn_anyvsl.isChecked():
-                    self.main_win = anyvsl_eng.mainwindow_eng()
-                    self.main_win.show()
-                    self.close()
-                elif self.uintr.radiobtn_rus.isChecked() and self.uintr.radiobtn_anyvsl.isChecked():
-                    self.main_win = anyvsl_rus.mainwindow_rus()
-                    self.main_win.show()
-                    self.close()
+        if self.ui_intro.eng_radiobtn.isChecked() and self.ui_intro.bealuna_radiobtn.isChecked():
+            self.main_win = bealuna_eng.MainWindowEng()
+            self.main_win.show()
+            self.close()
+
+        elif self.ui_intro.rus_radiobtn.isChecked() and self.ui_intro.bealuna_radiobtn.isChecked():
+            self.main_win = bealuna_rus.mainwindow_rus()
+            self.main_win.show()
+            self.close()
+
+        elif self.ui_intro.eng_radiobtn.isChecked() and self.ui_intro.anyvsl_radiobtn.isChecked():
+            self.main_win = anyvsl_eng.mainwindow_eng()
+            self.main_win.show()
+            self.close()
+
+        elif self.ui_intro.rus_radiobtn.isChecked() and self.ui_intro.anyvsl_radiobtn.isChecked():
+            self.main_win = anyvsl_rus.mainwindow_rus()
+            self.main_win.show()
+            self.close()
 
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    mainWin = intro_window()
+    mainWin = IntroWindow()
     mainWin.show()
     sys.exit(app.exec_())

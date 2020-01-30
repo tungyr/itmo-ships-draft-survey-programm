@@ -16,11 +16,11 @@ import __init__
 from ui_bealuna_eng import Ui_Form
 
 
-class mainwindow_eng(QWidget):
+class MainWindowEng(QWidget):
     def __init__(self, parent=None):
-        super(mainwindow_eng, self).__init__(parent)
+        super(MainWindowEng, self).__init__(parent)
 
-        self.ui = Ui_Form()   # назначение формы с ui файла
+        self.ui = Ui_Form()   # использование модуля с настройками интерфейса программы
         self.ui.setupUi(self)
 
         reg_draft = QRegExp("([2-8])([.])\d{1,3}")  # рег. выражения осадки

@@ -21,7 +21,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="5" column="1">
-    <widget class="QPushButton" name="start_btn">
+    <widget class="QPushButton" name="letsgo_btn">
      <property name="font">
       <font>
        <weight>75</weight>
@@ -103,7 +103,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="radiobtn_eng">
+      <widget class="QRadioButton" name="eng_radiobtn">
        <property name="font">
         <font>
          <family>Tahoma</family>
@@ -122,7 +122,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="radiobtn_rus">
+      <widget class="QRadioButton" name="rus_radiobtn">
        <property name="font">
         <font>
          <family>Tahoma</family>
@@ -160,7 +160,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="radiobtn_bealuna">
+      <widget class="QRadioButton" name="bealuna_radiobtn">
        <property name="font">
         <font>
          <family>Tahoma</family>
@@ -179,7 +179,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="radiobtn_anyvsl">
+      <widget class="QRadioButton" name="anyvsl_radiobtn">
        <property name="font">
         <font>
          <family>Tahoma</family>
@@ -256,7 +256,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>
