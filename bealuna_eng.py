@@ -23,41 +23,36 @@ class MainWindowEng(QWidget):
         self.ui = Ui_Form()   # использование модуля с настройками интерфейса программы
         self.ui.setupUi(self)
 
-        reg_draft = QRegExp("([2-8])([.])\d{1,3}")  # рег. выражения осадки
-        input_validator = QRegExpValidator(reg_draft, self.ui.F_ps_line)
-        self.ui.F_ps_line.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_draft, self.ui.F_ss_line)
-        self.ui.F_ss_line.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_draft, self.ui.M_ps_line)
-        self.ui.M_ps_line.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_draft, self.ui.M_ss_line)
-        self.ui.M_ss_line.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_draft, self.ui.A_ps_line)
-        self.ui.A_ps_line.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_draft, self.ui.A_ss_line)
-        self.ui.A_ss_line.setValidator(input_validator)
+        draft_lines = (self.ui.F_ps_line, self.ui.F_ss_line, self.ui.M_ps_line, self.ui.M_ss_line, self.ui.A_ps_line,
+                       self.ui.A_ss_line)
 
-        reg_dens = QRegExp("([0-2])([.])\d{1,3}")  # рег. выражения плотность воды
+        stores_lines = (self.ui.ballast_f, self.ui.fw_f, self.ui.hfo_f, self.ui.mgo_f, self.ui.lo_f, self.ui.slops_f,
+                        self.ui.sludge_f, )
+
+        # TODO: "([2-8])([.])\d{1,3}" ==> "([2-7.8])([.])\d{1,3}" HOW?
+        # определение валидаторов на основе регулярных выражения для полей осадок
+        reg_draft = QRegExp("([2-8])([.])\d{1,3}")
+        input_validator = QRegExpValidator(reg_draft)
+
+        for draft_line in draft_lines:
+            draft_line.setValidator(input_validator)
+
+        # всплывающие подсказки для полей осадок
+        for draft_line in draft_lines:
+            draft_line.setToolTip('Applicable draft values only: 2 - 7.8')
+
+        # валидатор для поля плотности воды
+        reg_dens = QRegExp("([0-2])([.])\d{1,3}")
         input_validator = QRegExpValidator(reg_dens, self.ui.dens_f)
         self.ui.dens_f.setValidator(input_validator)
+        self.ui.dens_f.setToolTip("Applicable density values only: 0.1 - 2")
 
-        reg_cons = QRegExp("\d{1,4}[.]\d{1,3}")  # рег. выражения запасы
-        input_validator = QRegExpValidator(reg_cons, self.ui.ballast_f)
-        self.ui.ballast_f.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_cons, self.ui.fw_f)
-        self.ui.fw_f.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_cons, self.ui.hfo_f)
-        self.ui.hfo_f.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_cons, self.ui.mgo_f)
-        self.ui.mgo_f.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_cons, self.ui.lo_f)
-        self.ui.lo_f.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_cons, self.ui.slops_f)
-        self.ui.slops_f.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_cons, self.ui.sludge_f)
-        self.ui.sludge_f.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_cons, self.ui.other_f)
-        self.ui.other_f.setValidator(input_validator)
+        # валидоторы полей запасов
+        reg_stores = QRegExp("\d{1,4}[.]\d{1,3}")
+        input_validator_stores = QRegExpValidator(reg_stores)
+
+        for store_line in stores_lines:
+            store_line.setValidator(input_validator_stores)
 
         # обработка кнопки, запуск расчета
         self.ui.countBtn.clicked.connect(self.calculate)
