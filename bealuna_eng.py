@@ -23,22 +23,32 @@ class MainWindowEng(QWidget):
         self.ui = Ui_Form()   # использование модуля с настройками интерфейса программы
         self.ui.setupUi(self)
 
-        draft_lines = (self.ui.F_ps_line, self.ui.F_ss_line, self.ui.M_ps_line, self.ui.M_ss_line, self.ui.A_ps_line,
-                       self.ui.A_ss_line)
+        self.draft_lines = (self.ui.F_ps_line, self.ui.F_ss_line, self.ui.M_ps_line, self.ui.M_ss_line,
+                            self.ui.A_ps_line, self.ui.A_ss_line)
 
-        stores_lines = (self.ui.ballast_f, self.ui.fw_f, self.ui.hfo_f, self.ui.mgo_f, self.ui.lo_f, self.ui.slops_f,
-                        self.ui.sludge_f, )
+        self.stores_lines = (self.ui.ballast_f, self.ui.fw_f, self.ui.hfo_f, self.ui.mgo_f, self.ui.lo_f,
+                             self.ui.slops_f, self.ui.sludge_f)
+
+        # установка значений по умолчанию для полей
+        # TODO half-transparent values + save last values inserted by user
+        for draft_line in self.draft_lines:
+            draft_line.setText('2.0')
+
+        for store_line in self.stores_lines:
+            store_line.setText('100')
+
+        self.ui.dens_f.setText('1.025')
 
         # TODO: "([2-8])([.])\d{1,3}" ==> "([2-7.8])([.])\d{1,3}" HOW?
         # определение валидаторов на основе регулярных выражения для полей осадок
         reg_draft = QRegExp("([2-8])([.])\d{1,3}")
         input_validator = QRegExpValidator(reg_draft)
 
-        for draft_line in draft_lines:
+        for draft_line in self.draft_lines:
             draft_line.setValidator(input_validator)
 
         # всплывающие подсказки для полей осадок
-        for draft_line in draft_lines:
+        for draft_line in self.draft_lines:
             draft_line.setToolTip('Applicable draft values only: 2 - 7.8')
 
         # валидатор для поля плотности воды
@@ -51,21 +61,21 @@ class MainWindowEng(QWidget):
         reg_stores = QRegExp("\d{1,4}[.]\d{1,3}")
         input_validator_stores = QRegExpValidator(reg_stores)
 
-        for store_line in stores_lines:
+        for store_line in self.stores_lines:
             store_line.setValidator(input_validator_stores)
 
         # обработка кнопки, запуск расчета
         self.ui.countBtn.clicked.connect(self.calculate)
 
     def calculate(self):
-        # отлавливание незаполненных форм
-        try:
-                min(float(x) for x in (self.ui.F_ps_line.text(),
-                                       self.ui.F_ss_line.text(),
-                                       self.ui.M_ps_line.text(),
-                                       self.ui.M_ss_line.text(),
-                                       self.ui.A_ps_line.text(),
-                                       self.ui.A_ss_line.text()))
+        # # отлавливание незаполненных форм
+         try:
+            min(float(x) for x in (self.ui.F_ps_line.text(),
+                                   self.ui.F_ss_line.text(),
+                                   self.ui.M_ps_line.text(),
+                                   self.ui.M_ss_line.text(),
+                                   self.ui.A_ps_line.text(),
+                                   self.ui.A_ss_line.text()))
         except ValueError:
                 warn = QMessageBox.warning(self, 'Message',
                                               "Applicable draft values only: 2 - 7.8"
@@ -73,6 +83,21 @@ class MainWindowEng(QWidget):
                                               "Applicable density values only: 0.1 - 2"
                                               + "\n", QMessageBox.Ok)
                 return
+
+        for draft_line in self.draft_lines:
+            print(draft_line)
+        #     if isinstance(float, draft_line.text()):
+        #         print(isinstance(float, draft_line.text()))
+        #         pass
+        #     else:
+        #         warn = QMessageBox.warning(self, 'Message',
+        #                                               "Applicable draft values only: 2 - 7.8"
+        #                                               + "\n" +
+        #                                               "Applicable density values only: 0.1 - 2"
+        #                                               + "\n", QMessageBox.Ok)
+        #         return
+
+
         # конвертирование осалок в тип float()
         fwd_ps = float(self.ui.F_ps_line.text())
         fwd_ss = float(self.ui.F_ss_line.text())
