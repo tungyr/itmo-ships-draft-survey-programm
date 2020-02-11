@@ -23,7 +23,7 @@ class MainWindowEng(QWidget):
         self.ui = Ui_Form()   # использование модуля с настройками интерфейса программы
         self.ui.setupUi(self)
 
-        # TODO: make dict instead of tuple
+
         self.draft_lines = (self.ui.F_ps_line, self.ui.F_ss_line, self.ui.M_ps_line, self.ui.M_ss_line,
                             self.ui.A_ps_line, self.ui.A_ss_line)
 
@@ -66,14 +66,15 @@ class MainWindowEng(QWidget):
             store_line.setValidator(input_validator_stores)
 
         # обработка кнопки, запуск расчета
-        self.ui.countBtn.clicked.connect(self.validate_forms(self.draft_lines, self.stores_lines))
+        self.ui.countBtn.clicked.connect(self.validate_forms(draft_lines=self.draft_lines,
+                                                             stores_lines=self.stores_lines, density_line=self.ui.dens_f))
         # self.ui.countBtn.clicked.connect(self.calculate)
 
 
 
     # TODO: density values?
 
-    def validate_forms(self, draft_lines, stores_lines):
+    def validate_forms(self, draft_lines, stores_lines, density_line):
         draft_lines = [float(draft_line) for draft_line in draft_lines]
 
         for draft_line in draft_lines:
@@ -84,22 +85,28 @@ class MainWindowEng(QWidget):
                 #       + "\n")
                 warn = QMessageBox.warning(self, 'Message',
                                            "Applicable draft values only: 2 - 7.8"
-                                           + "\n" +
-                                           "Applicable density values only: 0.1 - 2"
+                                           + "\n" + "Applicable density values only: 0.1 - 2"
                                            + "\n", QMessageBox.Ok)
 
                 return None
 
+        if density_line not in {0.1, 2}:
+            warn = QMessageBox.warning(self, 'Message', "Applicable density values only: 0.1 - 2" +
+                                       "\n", QMessageBox.Ok)
+            return None
+
+
         # проверка заполненности форм запасов и присваивание им 0 при случаи
-        cons_raw = [self.ui.dens_f.text(),
-                    self.ui.ballast_f.text(),
-                    self.ui.fw_f.text(),
-                    self.ui.hfo_f.text(),
-                    self.ui.mgo_f.text(),
-                    self.ui.lo_f.text(),
-                    self.ui.slops_f.text(),
-                    self.ui.sludge_f.text(),
-                    self.ui.other_f.text()]
+        # cons_raw = [self.ui.dens_f.text(),
+        #         #             self.ui.ballast_f.text(),
+        #         #             self.ui.fw_f.text(),
+        #         #             self.ui.hfo_f.text(),
+        #         #             self.ui.mgo_f.text(),
+        #         #             self.ui.lo_f.text(),
+        #         #             self.ui.slops_f.text(),
+        #         #             self.ui.sludge_f.text(),
+        #         #             self.ui.other_f.text()]
+
 
 
 
