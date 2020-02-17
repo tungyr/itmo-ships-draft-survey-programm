@@ -17,7 +17,7 @@ from ui_bealuna_eng import Ui_Form
 
 
 class MainWindowEng(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> object:
         super(MainWindowEng, self).__init__(parent)
 
         self.ui = Ui_Form()   # использование модуля с настройками интерфейса программы
@@ -31,6 +31,7 @@ class MainWindowEng(QWidget):
 
         # установка значений по умолчанию для полей
         # TODO half-transparent values + save last values inserted by user
+        # TODO previous values switches by user
         for draft_line in self.draft_lines:
             draft_line.setText('2.0')
 
@@ -64,53 +65,23 @@ class MainWindowEng(QWidget):
         for store_line in self.stores_lines:
             store_line.setValidator(input_validator_stores)
 
-        # обработка кнопки, запуск расчета
-        self.ui.countBtn.clicked.connect(self.validate_forms(draft_lines=self.draft_lines,
-                                        stores_lines=self.stores_lines, density_line=self.ui.dens_f))
+        if self.ui.countBtn.clicked:
+            self.ui.countBtn.clicked.connect(lambda: self.calculate(draft_lines=self.draft_lines,
+                                                   stores_lines=self.stores_lines, density_line=self.ui.dens_f))
 
     # TODO: density values?
 
-    def validate_forms(self, draft_lines, stores_lines, density_line):
-        for i in draft_lines:
-            print(i.text(), type(i.text()))
-        draft_lines_fl = [float(draft_line.text()) for draft_line in draft_lines]
 
-        for draft_line in draft_lines_fl:
-            if draft_line not in {2, 7.8}:
-                # print("Applicable draft values only: 2 - 7.8"
-                #       + "\n" +
-                #       "Applicable density values only: 0.1 - 2"
-                #       + "\n")
-                warn = QMessageBox.warning(self, 'Message',
-                                           "Applicable draft values only: 2 - 7.8"
-                                           + "\n" + "Applicable density values only: 0.1 - 2"
-                                           + "\n", QMessageBox.Ok)
-
-                return None
-
-        # if float(density_line.text()) not in {0.1, 2}:
-        #     warn = QMessageBox.warning(self, 'Message', "Applicable density values only: 0.1 - 2" +
-        #                                "\n", QMessageBox.Ok)
-        #     return None
-
-        stores_lines_int = [int(store_line.text()) for store_line in stores_lines]
-        # проверка заполненности форм запасов и присваивание им 0 при случаи
-        # cons_raw = [self.ui.dens_f.text(),
-        #         #             self.ui.ballast_f.text(),
-        #         #             self.ui.fw_f.text(),
-        #         #             self.ui.hfo_f.text(),
-        #         #             self.ui.mgo_f.text(),
-        #         #             self.ui.lo_f.text(),
-        #         #             self.ui.slops_f.text(),
-        #         #             self.ui.sludge_f.text(),
-        #         #             self.ui.other_f.text()]
-
-        density_line = float(density_line.text())
-
-        self.ui.countBtn.clicked.connect(self.calculate(draft_lines=draft_lines_fl,
-                                                        stores_lines=stores_lines_int, density_line=density_line))
 
     def calculate(self, draft_lines, stores_lines, density_line):
+        #TODO: zip
+
+        validates_result = self.validate_forms(draft_lines=self.draft_lines, stores_lines=self.stores_lines,
+                                               density_line=self.ui.dens_f)
+
+        draft_lines = validates_result[0]
+        stores_lines = validates_result[1]
+        density_line = validates_result[2]
 
         fwd_ps = draft_lines[0]
         fwd_ss = draft_lines[1]
@@ -152,12 +123,49 @@ class MainWindowEng(QWidget):
                       str(outcome[24]) + '\n' + str(outcome[25]) +
                       '\n' + str(outcome[26]) + '\n' + '\n' +
                       str(outcome[27]))
+        print(show_label)
 
         self.ui.result.setText(str(show_label))
-        return
 
 
 
+
+    def validate_forms(self, draft_lines, stores_lines, density_line):
+
+        draft_lines = [float(draft_line.text()) for draft_line in draft_lines]
+
+        for draft_line in draft_lines:
+            if draft_line not in {2, 7.8}:
+                # print("Applicable draft values only: 2 - 7.8"
+                #       + "\n" +
+                #       "Applicable density values only: 0.1 - 2"
+                #       + "\n")
+                warn = QMessageBox.warning(self, 'Message',
+                                           "Applicable draft values only: 2 - 7.8"
+                                           + "\n" + "Applicable density values only: 0.1 - 2"
+                                           + "\n", QMessageBox.Ok)
+                return None
+
+        # if float(density_line.text()) not in {0.1, 2}:
+        #     warn = QMessageBox.warning(self, 'Message', "Applicable density values only: 0.1 - 2" +
+        #                                "\n", QMessageBox.Ok)
+        #     return None
+
+        stores_lines = [int(store_line.text()) for store_line in stores_lines]
+        # проверка заполненности форм запасов и присваивание им 0 при случаи
+        # cons_raw = [self.ui.dens_f.text(),
+        #         #             self.ui.ballast_f.text(),
+        #         #             self.ui.fw_f.text(),
+        #         #             self.ui.hfo_f.text(),
+        #         #             self.ui.mgo_f.text(),
+        #         #             self.ui.lo_f.text(),
+        #         #             self.ui.slops_f.text(),
+        #         #             self.ui.sludge_f.text(),
+        #         #             self.ui.other_f.text()]
+
+        density_line = float(density_line.text())
+
+        return draft_lines, stores_lines, density_line
 
 
 
