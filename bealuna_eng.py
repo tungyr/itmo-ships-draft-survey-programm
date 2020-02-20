@@ -65,12 +65,8 @@ class MainWindowEng(QWidget):
         for store_line in self.stores_lines:
             store_line.setValidator(input_validator_stores)
 
-        if self.ui.countBtn.clicked:
-            self.ui.countBtn.clicked.connect(lambda: self.calculate(draft_lines=self.draft_lines,
+        self.ui.countBtn.clicked.connect(lambda: self.calculate(draft_lines=self.draft_lines,
                                                    stores_lines=self.stores_lines, density_line=self.ui.dens_f))
-
-    # TODO: density values?
-
 
 
     def calculate(self, draft_lines, stores_lines, density_line):
@@ -79,9 +75,23 @@ class MainWindowEng(QWidget):
         validates_result = self.validate_forms(draft_lines=self.draft_lines, stores_lines=self.stores_lines,
                                                density_line=self.ui.dens_f)
 
+        if validates_result is None:
+            return
+
+        calc_params = {'fwd_ps': 0, 'fwd_ss': 0, 'mid_ps': 0, 'mid_ss': 0, 'aft_ps': 0, 'aft_ss': 0, 'density': 0,
+                       'ballast': 0, 'fw': 0, 'hfo': 0, 'mgo': 0, 'lo': 0, 'slops': 0, 'sludge': 0, 'other': 0}
+
         draft_lines = validates_result[0]
         stores_lines = validates_result[1]
         density_line = validates_result[2]
+
+        index = 0
+        print(self.draft_lines[0].__dict__)
+        # for i in validates_result[0]:
+        #     calc_params[self.draft_lines[index]] = i
+        #     index += 1
+        #     print(calc_params)
+
 
         fwd_ps = draft_lines[0]
         fwd_ss = draft_lines[1]
@@ -128,42 +138,38 @@ class MainWindowEng(QWidget):
         self.ui.result.setText(str(show_label))
 
 
-
-
     def validate_forms(self, draft_lines, stores_lines, density_line):
 
-        draft_lines = [float(draft_line.text()) for draft_line in draft_lines]
+        try:
+            draft_lines = [float(draft_line.text()) for draft_line in draft_lines]
+            density_line = float(density_line.text())
+        except ValueError:
+            warn = QMessageBox.warning(self, 'Message',
+                                       "Applicable draft values only: 2 - 7.8"
+                                       + "\n" + "Applicable density values only: 0.1 - 2"
+                                       + "\n", QMessageBox.Ok)
+
+            return
+
+        try:
+            stores_lines = [int(store_line.text()) for store_line in stores_lines]
+        except ValueError:
+            warn = QMessageBox.warning(self, 'Message',
+                                       "Stores not filled up!" + "\n", QMessageBox.Ok)
+            return
 
         for draft_line in draft_lines:
             if draft_line not in {2, 7.8}:
-                # print("Applicable draft values only: 2 - 7.8"
-                #       + "\n" +
-                #       "Applicable density values only: 0.1 - 2"
-                #       + "\n")
                 warn = QMessageBox.warning(self, 'Message',
                                            "Applicable draft values only: 2 - 7.8"
                                            + "\n" + "Applicable density values only: 0.1 - 2"
                                            + "\n", QMessageBox.Ok)
-                return None
+                return
 
-        # if float(density_line.text()) not in {0.1, 2}:
-        #     warn = QMessageBox.warning(self, 'Message', "Applicable density values only: 0.1 - 2" +
-        #                                "\n", QMessageBox.Ok)
-        #     return None
-
-        stores_lines = [int(store_line.text()) for store_line in stores_lines]
-        # проверка заполненности форм запасов и присваивание им 0 при случаи
-        # cons_raw = [self.ui.dens_f.text(),
-        #         #             self.ui.ballast_f.text(),
-        #         #             self.ui.fw_f.text(),
-        #         #             self.ui.hfo_f.text(),
-        #         #             self.ui.mgo_f.text(),
-        #         #             self.ui.lo_f.text(),
-        #         #             self.ui.slops_f.text(),
-        #         #             self.ui.sludge_f.text(),
-        #         #             self.ui.other_f.text()]
-
-        density_line = float(density_line.text())
+        if 2 < density_line < 0.1:
+            warn = QMessageBox.warning(self, 'Message', "Applicable density values only: 0.1 - 2" +
+                                       "\n", QMessageBox.Ok)
+            return
 
         return draft_lines, stores_lines, density_line
 
