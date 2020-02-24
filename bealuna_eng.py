@@ -70,7 +70,7 @@ class MainWindowEng(QWidget):
 
 
     def calculate(self, draft_lines, stores_lines, density_line):
-        #TODO: zip
+        #TODO: clear forms for next calculation
 
         validates_result = self.validate_forms(draft_lines=self.draft_lines, stores_lines=self.stores_lines,
                                                density_line=self.ui.dens_f)
@@ -78,20 +78,14 @@ class MainWindowEng(QWidget):
         if validates_result is None:
             return
 
-        calc_params = {'fwd_ps': 0, 'fwd_ss': 0, 'mid_ps': 0, 'mid_ss': 0, 'aft_ps': 0, 'aft_ss': 0, 'density': 0,
-                       'ballast': 0, 'fw': 0, 'hfo': 0, 'mgo': 0, 'lo': 0, 'slops': 0, 'sludge': 0, 'other': 0}
+        draft_lines, stores_lines, density_line = validates_result[0], validates_result[1], validates_result[2]
 
-        draft_lines = validates_result[0]
-        stores_lines = validates_result[1]
-        density_line = validates_result[2]
+        params_labels = ['fwd_ps', 'fwd_ss', 'mid_ps', 'mid_ss', 'aft_ps', 'aft_ss', 'ballast', 'fw', 'hfo', 'mgo',
+                  'lo', 'slops', 'sludge', 'other', 'density']
 
-        index = 0
-        print(self.draft_lines[0].__dict__)
-        # for i in validates_result[0]:
-        #     calc_params[self.draft_lines[index]] = i
-        #     index += 1
-        #     print(calc_params)
-
+        params_values = validates_result[0] + validates_result[1]
+        params_values.append(density_line)
+        params_dict = dict(zip(params_labels, params_values))
 
         fwd_ps = draft_lines[0]
         fwd_ss = draft_lines[1]
@@ -157,9 +151,9 @@ class MainWindowEng(QWidget):
             warn = QMessageBox.warning(self, 'Message',
                                        "Stores not filled up!" + "\n", QMessageBox.Ok)
             return
-
+        # TODO: drafts > 2.0 not validating
         for draft_line in draft_lines:
-            if draft_line not in {2, 7.8}:
+            if draft_line not in {2.0, 7.8}:
                 warn = QMessageBox.warning(self, 'Message',
                                            "Applicable draft values only: 2 - 7.8"
                                            + "\n" + "Applicable density values only: 0.1 - 2"
