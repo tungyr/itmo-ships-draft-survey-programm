@@ -8,8 +8,9 @@ get_connection = lambda: storage.connect('hydrostatic.sqlite')
 
 LBP = 123.175
 
-# функция поиска отстояния для поправки кормовой осадки
+
 def aft_dist(A_mean):
+    """функция поиска отстояния для поправки кормовой осадки"""
     with get_connection() as conn:
         a = storage.aft_dist_find(conn, A_mean)
         if type(a) is tuple:
@@ -17,20 +18,20 @@ def aft_dist(A_mean):
         a = round(a, 3)
     return a
 
-# функция поиска гидростатических параметров
+
 def hydrostatic_values(MOMC, item):
+    """функция поиска гидростатических параметров"""
     with get_connection() as conn:
         hydrostatic_values = storage.hydrostatic_find(conn, MOMC, item)
     return hydrostatic_values
 
-# основная функция расчета программы
-def calc(fwd_ps, fwd_ss, mid_ps, mid_ss, aft_ps, aft_ss, dens, ballast, fw, hfo,
-         mgo, lo, slops, sludge, other):
 
+def calc(parameters):
+    """основная функция расчета программы"""
     #  определение средних осадок
-    F_mean = round((fwd_ps + fwd_ss) / 2, 3)
-    M_mean = round((mid_ps + mid_ss) / 2, 3)
-    A_mean = round((aft_ps + aft_ss) / 2, 3)
+    F_mean = round((parameters['fwd_ps'] + parameters['fwd_ss']) / 2, 3)
+    M_mean = round((parameters['mid_ps'] + parameters['mid_ss']) / 2, 3)
+    A_mean = round((parameters['aft_ps'] + parameters['aft_ss']) / 2, 3)
 
     #  отстояния для поправок осадок
     f_delta = -2.095
@@ -102,13 +103,14 @@ def calc(fwd_ps, fwd_ss, mid_ps, mid_ss, aft_ps, aft_ss, dens, ballast, fw, hfo,
     D_trim = round(D_momc + FTC + STC, 3)
 
     #  водоизмещение итоговое
-    D_corr = round(D_trim * dens / 1.025, 3)
+    D_corr = round(D_trim * parameters['density'] / 1.025, 3)
 
     #  судно порожнем
     lihgt_ship = 3269.367
 
     #  общее количество судовых запасов
-    total = ballast + fw + hfo + mgo + lo + slops + sludge + other
+    total = parameters['ballast'] + parameters['fw'] + parameters['hfo'] + parameters['mgo'] + parameters['lo'] + \
+             parameters['slops'] + parameters['sludge'] + parameters['other']
 
     constant = 0
     #  постоянный мертвый вес судна

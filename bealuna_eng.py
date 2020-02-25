@@ -81,36 +81,15 @@ class MainWindowEng(QWidget):
         draft_lines, stores_lines, density_line = validates_result[0], validates_result[1], validates_result[2]
 
         params_labels = ['fwd_ps', 'fwd_ss', 'mid_ps', 'mid_ss', 'aft_ps', 'aft_ss', 'ballast', 'fw', 'hfo', 'mgo',
-                  'lo', 'slops', 'sludge', 'other', 'density']
+                         'lo', 'slops', 'sludge', 'other', 'density']
 
         params_values = validates_result[0] + validates_result[1]
         params_values.append(density_line)
-        params_dict = dict(zip(params_labels, params_values))
-
-        fwd_ps = draft_lines[0]
-        fwd_ss = draft_lines[1]
-        mid_ps = draft_lines[2]
-        mid_ss = draft_lines[3]
-        aft_ps = draft_lines[4]
-        aft_ss = draft_lines[5]
-
-        # присваивание имен значениям запасов
-
-        ballast =   stores_lines[0]
-        fw =        stores_lines[1]
-        hfo =       stores_lines[2]
-        mgo =       stores_lines[3]
-        lo =        stores_lines[4]
-        slops =     stores_lines[5]
-        sludge =    stores_lines[6]
-        other =     stores_lines[7]
-
-        dens = density_line
+        params = dict(zip(params_labels, params_values))
 
         # вызов функции расчета с передачей параметров
-        outcome = __init__.calc(fwd_ps, fwd_ss, mid_ps, mid_ss, aft_ps, aft_ss,
-                                dens, ballast, fw, hfo, mgo, lo, slops, sludge,
-                                other)
+        outcome = __init__.calc(params)
+
         # вывод значений в форму программы
         show_label = (str(outcome[0]) + '; ' + str(outcome[1]) + '; ' +
                       str(outcome[2]) + '\n' + str(outcome[3]) + '\n' +
