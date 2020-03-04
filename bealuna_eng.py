@@ -40,30 +40,31 @@ class MainWindowEng(QWidget):
 
         self.ui.dens_f.setText('1.025')
 
-
-        # определение валидаторов на основе регулярных выражения для полей осадок
-        reg_draft = QRegExp("([2-8])([.])\d{1,3}")
-        input_validator = QRegExpValidator(reg_draft)
-
-        for draft_line in self.draft_lines:
-            draft_line.setValidator(input_validator)
-
-        # всплывающие подсказки для полей осадок
+        # # всплывающие подсказки для полей осадок
         for draft_line in self.draft_lines:
             draft_line.setToolTip('Applicable draft values only: 2 - 7.8')
 
-        # валидатор для поля плотности воды
-        reg_dens = QRegExp("([0-2])([.])\d{1,3}")
-        input_validator = QRegExpValidator(reg_dens, self.ui.dens_f)
-        self.ui.dens_f.setValidator(input_validator)
-        self.ui.dens_f.setToolTip("Applicable density values only: 0.1 - 2")
+        # определение валидаторов на основе регулярных выражения для полей осадок
+        # reg_draft = QRegExp("([2-8])([.])\d{1,3}")
+        # input_validator = QRegExpValidator(reg_draft)
+        #
+        # for draft_line in self.draft_lines:
+        #     draft_line.setValidator(input_validator)
+        #
 
-        # валидоторы полей запасов
-        reg_stores = QRegExp("\d{1,4}[.]\d{1,3}")
-        input_validator_stores = QRegExpValidator(reg_stores)
 
-        for store_line in self.stores_lines:
-            store_line.setValidator(input_validator_stores)
+        # # валидатор для поля плотности воды
+        # reg_dens = QRegExp("([0-2])([.])\d{1,3}")
+        # input_validator = QRegExpValidator(reg_dens, self.ui.dens_f)
+        # self.ui.dens_f.setValidator(input_validator)
+        # self.ui.dens_f.setToolTip("Applicable density values only: 0.1 - 2")
+        #
+        # # валидоторы полей запасов
+        # reg_stores = QRegExp("\d{1,4}[.]\d{1,3}")
+        # input_validator_stores = QRegExpValidator(reg_stores)
+        #
+        # for store_line in self.stores_lines:
+        #     store_line.setValidator(input_validator_stores)
 
         self.ui.countBtn.clicked.connect(lambda: self.calculate(draft_lines=self.draft_lines,
                                                    stores_lines=self.stores_lines, density_line=self.ui.dens_f))
@@ -111,7 +112,7 @@ class MainWindowEng(QWidget):
         self.ui.result.setText(str(show_label))
 
 
-    def validate_forms(self, draft_lines, stores_lines, density_line):
+    def validate_forms(self, draft_lines, stores_lines, density_line) -> (list, list, float):
 
         try:
             draft_lines = [float(draft_line.text()) for draft_line in draft_lines]
@@ -121,7 +122,6 @@ class MainWindowEng(QWidget):
                                        "Applicable draft values only: 2 - 7.8"
                                        + "\n" + "Applicable density values only: 0.1 - 2"
                                        + "\n", QMessageBox.Ok)
-
             return
 
         try:
@@ -130,16 +130,16 @@ class MainWindowEng(QWidget):
             warn = QMessageBox.warning(self, 'Message',
                                        "Stores not filled up!" + "\n", QMessageBox.Ok)
             return
-        # TODO: drafts > 2.0 not validating
-        for draft_line in draft_lines:
-            if draft_line not in {2.0, 7.8}:
-                warn = QMessageBox.warning(self, 'Message',
-                                           "Applicable draft values only: 2 - 7.8"
-                                           + "\n" + "Applicable density values only: 0.1 - 2"
-                                           + "\n", QMessageBox.Ok)
-                return
 
-        if 2 < density_line < 0.1:
+        if max(draft_lines) > 7.8 or min(draft_lines) < 2.0:
+            warn = QMessageBox.warning(self, 'Message',
+                                       "Applicable draft values only: 2 - 7.8"
+                                       + "\n" + "Applicable density values only: 0.1 - 2"
+                                       + "\n", QMessageBox.Ok)
+
+            return
+
+        if 2.0 < density_line or density_line < 0.1:
             warn = QMessageBox.warning(self, 'Message', "Applicable density values only: 0.1 - 2" +
                                        "\n", QMessageBox.Ok)
             return

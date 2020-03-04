@@ -12,7 +12,7 @@ import bealuna_rus
 import anyvsl_eng
 import anyvsl_rus
 
-
+# TODO: return from calc page to intro window
 class IntroWindow(QWidget):
     def __init__(self, parent=None):
         """Начальное окно с опциями выбора дальнейшей модели расчета"""

@@ -82,7 +82,7 @@ def calc(parameters):
         FTC = FTC  # ?
 
     #  величина разброса для интерполляции в БД
-    increm = 0.50  # incr. value for interpolation
+    increm = 0.50
 
     #  выборка тонн на см
     MTC_momc = round(hydrostatic_values(MOMC, 4), 3)  # fm DB with interpolation by MOMC
