@@ -12,6 +12,11 @@ import bealuna_rus
 import anyvsl_eng
 import anyvsl_rus
 
+# TODO: springs
+# TODO: tests
+# TODO: report to excel
+# TODO: sessions menu
+# TODO: reset button
 # TODO: return from calc page to intro window
 class IntroWindow(QWidget):
     def __init__(self, parent=None):

@@ -25,14 +25,14 @@ def get_aft_dist_interp(conn, A_mean):
         with conn:  # выборка из БД по округленной осадке
                 cursor = conn.execute(SQL_SELECT_DIST_BY_AFT_DRAFT_INTERP, (A_mean_rounded,))
                 return cursor.fetchmany(2)
-                conn.close()
+
 
 
 def get_hydrostatic(conn, MOMC):
         with conn:  # выборка из БД по округленной осадке
                 cursor = conn.execute(SQL_SELECT_HYDROSTATIC_BY_MOMC, (MOMC,))
                 return cursor.fetchmany(2)
-                conn.close()
+
 
 
 # выборка двух значений гидростатических данных для интерполляции
@@ -42,7 +42,7 @@ def get_hydrostatic_interp(conn, MOMC):
         with conn:
             cursor = conn.execute(SQL_SELECT_HYDROSTATIC_BY_MOMC_INTERP, (round(MOMC_rounded, 4),))
             return cursor.fetchmany(2)
-            conn.close()
+
 
 
 def aft_dist_find(conn, A_mean):
@@ -57,7 +57,7 @@ def aft_dist_find(conn, A_mean):
         with conn:
             aft_dist = conn.execute(SQL_SELECT_DIST_BY_AFT_DRAFT, (A_mean,))
             return aft_dist.fetchone()
-            conn.close()
+
     else:  # значение с сотыми и обращение к базе через функцию get_aft_dist_interp и
            # последующая передача результата выборки в функцию интерполлирования aft_interp
         table_result = get_aft_dist_interp(conn, A_mean)

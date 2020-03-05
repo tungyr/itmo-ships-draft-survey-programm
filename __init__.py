@@ -8,6 +8,7 @@ get_connection = lambda: storage.connect('hydrostatic.sqlite')
 
 LBP = 123.175
 
+# TODO: ->
 
 def aft_dist(A_mean):
     """функция поиска отстояния для поправки кормовой осадки"""
@@ -112,6 +113,7 @@ def calc(parameters):
     total = parameters['ballast'] + parameters['fw'] + parameters['hfo'] + parameters['mgo'] + parameters['lo'] + \
              parameters['slops'] + parameters['sludge'] + parameters['other']
 
+    # TODO: constant?
     constant = 0
     #  постоянный мертвый вес судна
     if D_corr == 0:
