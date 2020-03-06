@@ -11,6 +11,7 @@ from PyQt5.QtCore import QRegExp
 from PyQt5.QtGui import QRegExpValidator
 
 import __init__
+import export
 
 
 from ui_bealuna_eng import Ui_Form
@@ -108,6 +109,8 @@ class MainWindowEng(QWidget):
                       '\n' + str(outcome[26]) + '\n' + '\n' +
                       str(outcome[27]))
         print(show_label)
+        export.export_xls(outcome)
+
 
         self.ui.result.setText(str(show_label))
 
