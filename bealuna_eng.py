@@ -14,7 +14,7 @@ import __init__
 import export
 
 
-from ui_bealuna_eng import Ui_Form
+from ui_bealuna_eng2 import Ui_Form
 
 
 class MainWindowEng(QWidget):
@@ -23,6 +23,8 @@ class MainWindowEng(QWidget):
 
         self.ui = Ui_Form()   # использование модуля с настройками интерфейса программы
         self.ui.setupUi(self)
+
+        self.outcome = 0
 
         self.draft_lines = (self.ui.F_ps_line, self.ui.F_ss_line, self.ui.M_ps_line, self.ui.M_ss_line,
                             self.ui.A_ps_line, self.ui.A_ss_line)
@@ -67,8 +69,28 @@ class MainWindowEng(QWidget):
         # for store_line in self.stores_lines:
         #     store_line.setValidator(input_validator_stores)
 
+
         self.ui.countBtn.clicked.connect(lambda: self.calculate(draft_lines=self.draft_lines,
                                                    stores_lines=self.stores_lines, density_line=self.ui.dens_f))
+
+        # TODO: export to excel
+
+        self.ui.export_2.clicked.connect(lambda: export.export_xls(self.outcome))
+
+        self.ui.clear.clicked.connect(lambda: self.clear_forms())
+
+
+
+    def clear_forms(self):
+        for draft_line in self.draft_lines:
+            draft_line.setText('')
+
+        for store_line in self.stores_lines:
+            store_line.setText('')
+
+        self.ui.dens_f.setText('')
+
+
 
 
     def calculate(self, draft_lines, stores_lines, density_line):
@@ -108,11 +130,16 @@ class MainWindowEng(QWidget):
                       str(outcome[24]) + '\n' + str(outcome[25]) +
                       '\n' + str(outcome[26]) + '\n' + '\n' +
                       str(outcome[27]))
-        print(show_label)
-        export.export_xls(outcome)
 
+        self.outcome = outcome
 
         self.ui.result.setText(str(show_label))
+
+        return self.outcome
+
+
+
+
 
 
     def validate_forms(self, draft_lines, stores_lines, density_line) -> (list, list, float):

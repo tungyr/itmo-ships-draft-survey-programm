@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>600</height>
+    <height>623</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -20,67 +20,9 @@
    <string>Draft survey HC Bea-Luna</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
-   <item row="0" column="1">
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLabel" name="dens_l">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Tahoma</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Water density:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="dens_f">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="countBtn">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Tahoma</family>
-         <pointsize>10</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Calculate
-displacement</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
    <item row="1" column="1">
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="0" column="0" colspan="2" alignment="Qt::AlignHCenter">
+     <item row="0" column="1" colspan="2" alignment="Qt::AlignHCenter">
       <widget class="QLabel" name="result_l">
        <property name="font">
         <font>
@@ -95,7 +37,7 @@ displacement</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item row="1" column="1">
       <widget class="QLabel" name="result_lables">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -150,7 +92,20 @@ Displacement corrected, mt:</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item row="4" column="0">
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="1" column="2">
       <widget class="QLabel" name="result">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -186,36 +141,219 @@ Displacement corrected, mt:</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
+     <item row="4" column="1" colspan="2">
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QPushButton" name="countBtn">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Tahoma</family>
+           <pointsize>11</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Calculate
+displacement</string>
+         </property>
+         <property name="autoDefault">
+          <bool>true</bool>
+         </property>
+         <property name="default">
+          <bool>true</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="export_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Tahoma</family>
+           <pointsize>11</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Export to 
+excel</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
-     <item row="2" column="1">
-      <spacer name="verticalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
+    </layout>
+   </item>
+   <item row="0" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QPushButton" name="main_menu">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
+       <property name="font">
+        <font>
+         <family>Tahoma</family>
+         <pointsize>11</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
        </property>
-      </spacer>
+       <property name="text">
+        <string>Main menu</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="clear">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <family>Tahoma</family>
+         <pointsize>11</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Clear forms</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
    <item row="0" column="0" rowspan="2">
     <layout class="QGridLayout" name="gridLayout">
+     <item row="10" column="0" colspan="2" alignment="Qt::AlignHCenter">
+      <widget class="QLabel" name="slops_l">
+       <property name="font">
+        <font>
+         <family>Tahoma</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Slop stores:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLineEdit" name="M_ps_line">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-family:'Consolas'; color:#6a8759;&quot;&gt;Applicable draft values only: 2 - 7.8&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="2" colspan="2">
+      <widget class="QLineEdit" name="mgo_f">
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="0" colspan="2" alignment="Qt::AlignHCenter">
+      <widget class="QLabel" name="lo_l">
+       <property name="font">
+        <font>
+         <family>Tahoma</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Lube oil:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0" colspan="2" alignment="Qt::AlignHCenter">
+      <widget class="QLabel" name="mgo_l">
+       <property name="font">
+        <font>
+         <family>Tahoma</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Diesel oil:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="2" colspan="2">
+      <widget class="QLineEdit" name="slops_f">
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLineEdit" name="A_ps_line">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-family:'Consolas'; color:#6a8759;&quot;&gt;Applicable draft values only: 2 - 7.8&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="3">
+      <widget class="QLineEdit" name="A_ss_line">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-family:'Consolas'; color:#6a8759;&quot;&gt;Applicable draft values only: 2 - 7.8&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="0" colspan="2" alignment="Qt::AlignHCenter">
+      <widget class="QLabel" name="other_l">
+       <property name="font">
+        <font>
+         <family>Tahoma</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Other:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="13" column="2" colspan="2">
+      <widget class="QLineEdit" name="dens_f">
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
      <item row="12" column="2" colspan="2">
       <widget class="QLineEdit" name="other_f">
        <property name="alignment">
@@ -223,15 +361,41 @@ Displacement corrected, mt:</string>
        </property>
       </widget>
      </item>
-     <item row="11" column="2" colspan="2">
-      <widget class="QLineEdit" name="sludge_f">
+     <item row="7" column="0" colspan="2" alignment="Qt::AlignHCenter">
+      <widget class="QLabel" name="hfo_l">
+       <property name="font">
+        <font>
+         <family>Tahoma</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Heavy fuel:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="0" colspan="2" alignment="Qt::AlignHCenter">
+      <widget class="QLabel" name="sludge_l">
+       <property name="font">
+        <font>
+         <family>Tahoma</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Sludge:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="2" colspan="2">
+      <widget class="QLineEdit" name="fw_f">
        <property name="alignment">
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
-     <item row="10" column="2" colspan="2">
-      <widget class="QLineEdit" name="slops_f">
+     <item row="9" column="2" colspan="2">
+      <widget class="QLineEdit" name="lo_f">
        <property name="alignment">
         <set>Qt::AlignCenter</set>
        </property>
@@ -257,65 +421,8 @@ Displacement corrected, mt:</string>
        </property>
       </widget>
      </item>
-     <item row="7" column="0" colspan="2" alignment="Qt::AlignHCenter">
-      <widget class="QLabel" name="hfo_l">
-       <property name="font">
-        <font>
-         <family>Tahoma</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Heavy fuel:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="2" colspan="2">
-      <widget class="QLineEdit" name="lo_f">
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="2" colspan="2">
-      <widget class="QLineEdit" name="hfo_f">
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="2" colspan="2">
-      <widget class="QLineEdit" name="mgo_f">
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="2" colspan="2">
-      <widget class="QLineEdit" name="fw_f">
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="0" colspan="2" alignment="Qt::AlignHCenter">
-      <widget class="QLabel" name="slops_l">
-       <property name="font">
-        <font>
-         <family>Tahoma</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Slop stores:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLineEdit" name="M_ps_line">
-       <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-family:'Consolas'; color:#6a8759;&quot;&gt;Applicable draft values only: 2 - 7.8&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
+     <item row="11" column="2" colspan="2">
+      <widget class="QLineEdit" name="sludge_f">
        <property name="alignment">
         <set>Qt::AlignCenter</set>
        </property>
@@ -370,13 +477,16 @@ Displacement corrected, mt:</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="1" rowspan="3" colspan="2">
-      <widget class="QLabel" name="ship">
-       <property name="text">
-        <string/>
+     <item row="5" column="0" colspan="2" alignment="Qt::AlignHCenter">
+      <widget class="QLabel" name="ballast_l">
+       <property name="font">
+        <font>
+         <family>Tahoma</family>
+         <pointsize>10</pointsize>
+        </font>
        </property>
-       <property name="pixmap">
-        <pixmap>ship.jpg</pixmap>
+       <property name="text">
+        <string>Ballast:</string>
        </property>
       </widget>
      </item>
@@ -404,30 +514,17 @@ Displacement corrected, mt:</string>
        </property>
       </widget>
      </item>
+     <item row="7" column="2" colspan="2">
+      <widget class="QLineEdit" name="hfo_f">
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
      <item row="1" column="0">
       <widget class="QLineEdit" name="F_ps_line">
        <property name="toolTip">
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;pre align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; background-color:#2b2b2b;&quot;&gt;&lt;span style=&quot; font-family:'Consolas'; color:#6a8759;&quot;&gt;Applicable draft values only: 2 - 7.8&lt;/span&gt;&lt;/pre&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="3">
-      <widget class="QLineEdit" name="A_ss_line">
-       <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-family:'Consolas'; color:#6a8759;&quot;&gt;Applicable draft values only: 2 - 7.8&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLineEdit" name="A_ps_line">
-       <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-family:'Consolas'; color:#6a8759;&quot;&gt;Applicable draft values only: 2 - 7.8&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -444,21 +541,18 @@ Displacement corrected, mt:</string>
        </property>
       </widget>
      </item>
-     <item row="5" column="0" colspan="2" alignment="Qt::AlignHCenter">
-      <widget class="QLabel" name="ballast_l">
-       <property name="font">
-        <font>
-         <family>Tahoma</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
+     <item row="1" column="1" rowspan="3" colspan="2">
+      <widget class="QLabel" name="ship">
        <property name="text">
-        <string>Ballast:</string>
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>ship.jpg</pixmap>
        </property>
       </widget>
      </item>
-     <item row="8" column="0" colspan="2" alignment="Qt::AlignHCenter">
-      <widget class="QLabel" name="mgo_l">
+     <item row="13" column="0" colspan="2">
+      <widget class="QLabel" name="dens_l">
        <property name="font">
         <font>
          <family>Tahoma</family>
@@ -466,61 +560,10 @@ Displacement corrected, mt:</string>
         </font>
        </property>
        <property name="text">
-        <string>Diesel oil:</string>
+        <string>Water density:</string>
        </property>
-      </widget>
-     </item>
-     <item row="9" column="0" colspan="2" alignment="Qt::AlignHCenter">
-      <widget class="QLabel" name="lo_l">
-       <property name="font">
-        <font>
-         <family>Tahoma</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Lube oil:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="11" column="0" colspan="2" alignment="Qt::AlignHCenter">
-      <widget class="QLabel" name="sludge_l">
-       <property name="font">
-        <font>
-         <family>Tahoma</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Sludge:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="12" column="0" colspan="2" alignment="Qt::AlignHCenter">
-      <widget class="QLabel" name="other_l">
-       <property name="font">
-        <font>
-         <family>Tahoma</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Other:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="3">
-      <widget class="QPushButton" name="pushButton">
-       <property name="font">
-        <font>
-         <family>Tahoma</family>
-         <pointsize>10</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Clear forms</string>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
@@ -543,8 +586,6 @@ Displacement corrected, mt:</string>
   <tabstop>slops_f</tabstop>
   <tabstop>sludge_f</tabstop>
   <tabstop>other_f</tabstop>
-  <tabstop>dens_f</tabstop>
-  <tabstop>countBtn</tabstop>
  </tabstops>
  <resources/>
  <connections/>
