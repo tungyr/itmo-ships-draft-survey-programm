@@ -12,6 +12,7 @@ from PyQt5.QtGui import QRegExpValidator
 
 import __init__
 import export
+import intro
 
 
 from ui_bealuna_eng2 import Ui_Form
@@ -25,6 +26,7 @@ class MainWindowEng(QWidget):
         self.ui.setupUi(self)
 
         self.outcome = 0
+        self.vessel_name = "HC Bea-Luna"
 
         self.draft_lines = (self.ui.F_ps_line, self.ui.F_ss_line, self.ui.M_ps_line, self.ui.M_ss_line,
                             self.ui.A_ps_line, self.ui.A_ss_line)
@@ -33,8 +35,6 @@ class MainWindowEng(QWidget):
                              self.ui.slops_f, self.ui.sludge_f, self.ui.other_f)
 
         # установка значений по умолчанию для полей
-        # TODO half-transparent values + save last values inserted by user
-        # TODO previous values switches by user
         for draft_line in self.draft_lines:
             draft_line.setText('2.0')
 
@@ -75,9 +75,19 @@ class MainWindowEng(QWidget):
 
         # TODO: export to excel
 
-        self.ui.export_2.clicked.connect(lambda: export.export_xls(self.outcome))
+        # self.ui.export_2.clicked.connect(export.App(self.outcome))
+        self.ui.export_2.clicked.connect(lambda: export.App(self.outcome, self.vessel_name))
 
         self.ui.clear.clicked.connect(lambda: self.clear_forms())
+
+        self.ui.main_menu.clicked.connect(lambda: intro_window())
+
+        def intro_window():
+            self.main_win = intro.IntroWindow()
+            self.main_win.show()
+            self.close()
+
+        # self.ui.main_menu.clicked.connect(lambda: print('pushed'))
 
 
 
@@ -90,11 +100,14 @@ class MainWindowEng(QWidget):
 
         self.ui.dens_f.setText('')
 
+        self.ui.result.setText('')
+
+
+
 
 
 
     def calculate(self, draft_lines, stores_lines, density_line):
-        #TODO: clear forms for next calculation
 
         validates_result = self.validate_forms(draft_lines=self.draft_lines, stores_lines=self.stores_lines,
                                                density_line=self.ui.dens_f)
@@ -136,10 +149,6 @@ class MainWindowEng(QWidget):
         self.ui.result.setText(str(show_label))
 
         return self.outcome
-
-
-
-
 
 
     def validate_forms(self, draft_lines, stores_lines, density_line) -> (list, list, float):
