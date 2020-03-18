@@ -1,8 +1,8 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog
+from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog, QMessageBox
 from PyQt5.QtGui import QIcon
 from openpyxl import Workbook
-from openpyxl import load_workbook
+from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font
 from datetime import date, datetime, time
 
 labels = ["Fwd mean draft, m: ",
@@ -40,8 +40,8 @@ class App(QWidget):
     def __init__(self, data, vessel_name):
         super().__init__()
         self.title = 'PyQt5 file save dialog'
-        self.left = 10
-        self.top = 10
+        self.left = 100
+        self.top = 100
         self.width = 640
         self.height = 480
         self.data = data
@@ -56,7 +56,6 @@ class App(QWidget):
         # self.openFileNameDialog()
         # self.openFileNamesDialog()
         self.saveFileDialog()
-        self.save_xls()
 
     def saveFileDialog(self):
         options = QFileDialog.Options()
@@ -67,33 +66,58 @@ class App(QWidget):
                                                         f"{self.vessel_name} draft calculation" + ".xlsx",
                                                   "Excel Files (*.xlsx);;All Files (*)", options=options)
 
-        if '.xlsx' not in self.filename:
-            self.filename = self.filename + ".xlsx"
-            print(self.filename)
+        if self.filename != "":
+            if '.xlsx' not in self.filename:
+                self.filename = self.filename + ".xlsx"
+                print(self.filename)
+            self.save_xls()
 
         return self.filename
 
     def save_xls(self):
 
-        workbook = Workbook()
-        sheet = workbook.active
-        sheet["A1"] = f'Draft-survey calculation of m/v "{self.vessel_name}"'
-        sheet["A2"] = str(datetime.today())[:16]
-        sheet["A3"] = 'Results:'
+        alignment_center = Alignment(horizontal='center')
 
-        row = 4
+        wb = Workbook()
+        ws = wb.active
+
+        ws.merge_cells('A1:I1')
+        header = ws["A1"]
+        header.value = f'Draft-survey calculation of m/v "{self.vessel_name}"'
+        header.font = Font(name='Calibri', size=16, bold=True)
+        header.alignment = alignment_center
+
+        ws["E2"] = str(datetime.today())[:16]
+
+        ws.merge_cells('A4:I4')
+        results_title = ws["A4"]
+        results_title.value = 'Results: '
+        results_title.alignment = alignment_center
+        results_title.font = Font(name="Calibri", size=14, bold=True)
+
+        row = 6
         for label in labels:
-            sheet["A" + str(row)] = label
+            cell = ws["B" + str(row)]
+            cell.value = label
+            cell.font = Font(name="Calibri", size=14)
             row += 1
 
-        row = 4
+        row = 6
         for item in self.data:
-            sheet["B" + str(row)] = str(item)
+            cell = ws["G" + str(row)]
+            cell.value = str(item)
+            cell.font = Font(name="Calibri", size=14)
             row += 1
 
-        workbook.save(filename=self.filename)
+        try:
+            wb.save(filename=self.filename)
+        except PermissionError:
+            warn = QMessageBox.warning(self, 'Error!',
+                                       "Error! File to overwrite is open!"
+                                       + "\n", QMessageBox.Ok)
+
         self.close()
-        return
+
 
 
 
