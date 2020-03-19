@@ -15,7 +15,7 @@ from PyQt5.QtGui import QRegExpValidator
 import anyvsl_init
 
 
-from ui_anyvsl_rus import Ui_Form
+from ui.ui_anyvsl_rus import Ui_Form
 
 
 class mainwindow_rus(QWidget):

@@ -13,7 +13,7 @@ from PyQt5.QtGui import QRegExpValidator
 import __init__
 
 
-from ui_bealuna_rus import Ui_Form
+from ui.ui_bealuna_rus import Ui_Form
 
 
 class mainwindow_rus(QWidget):

@@ -4,12 +4,10 @@ import sys
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtWidgets import *
 
-import __init__
 import export
+import __init__
 import intro
-
-
-from ui_bealuna_eng import Ui_Form
+from ui.ui_bealuna_eng import Ui_Form
 
 
 class MainWindowEng(QWidget):
@@ -18,6 +16,8 @@ class MainWindowEng(QWidget):
 
         self.ui = Ui_Form()   # использование модуля с настройками интерфейса программы
         self.ui.setupUi(self)
+
+        # self.ui.ship_lbl.setPixmap(QtGui.QPixmap("ship.jpg"))
 
         self.outcome = 0
         self.vessel_name = "HC Bea-Luna"

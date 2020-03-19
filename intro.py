@@ -6,9 +6,9 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QWidget
 import sys
 
-from ui import ui_intro
-from ui_intro import Ui_Draft_survey
+from ui.ui_intro import Ui_Draft_survey
 from widgets import anyvsl_eng, anyvsl_rus, bealuna_eng, bealuna_rus
+
 
 
 class IntroWindow(QWidget):

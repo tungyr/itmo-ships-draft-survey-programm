@@ -13,7 +13,7 @@ from PyQt5.QtGui import QRegExpValidator
 import anyvsl_init
 
 
-from ui_anyvsl_eng import Ui_Form
+from ui.ui_anyvsl_eng import Ui_Form
 
 
 class mainwindow_eng(QWidget):
