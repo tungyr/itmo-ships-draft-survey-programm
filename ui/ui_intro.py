@@ -49,7 +49,7 @@ class Ui_Draft_survey(object):
         self.bea_luna_pic.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.bea_luna_pic.setMidLineWidth(1)
         self.bea_luna_pic.setText("")
-        self.bea_luna_pic.setPixmap(QtGui.QPixmap("HC_BEA_LUNAcr.jpg"))
+        self.bea_luna_pic.setPixmap(QtGui.QPixmap("img/HC_BEA_LUNAcr.jpg"))
         self.bea_luna_pic.setAlignment(QtCore.Qt.AlignCenter)
         self.bea_luna_pic.setObjectName("bea_luna_pic")
         self.gridLayout.addWidget(self.bea_luna_pic, 1, 1, 1, 1)

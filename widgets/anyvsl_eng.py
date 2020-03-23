@@ -1,10 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import sys
-from PyQt5 import Qt
-from PyQt5 import QtCore, QtWidgets, QtGui
+from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
 from functools import partial
 
 from PyQt5.QtCore import QRegExp

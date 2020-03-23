@@ -1,12 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import sys
-from PyQt5 import QtCore, QtWidgets, QtGui
+from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import *
 
-import export
-import __init__
-import intro
+import __init__, export, intro
 from ui.ui_bealuna_eng import Ui_Form
 
 
@@ -16,8 +14,6 @@ class MainWindowEng(QWidget):
 
         self.ui = Ui_Form()   # использование модуля с настройками интерфейса программы
         self.ui.setupUi(self)
-
-        # self.ui.ship_lbl.setPixmap(QtGui.QPixmap("ship.jpg"))
 
         self.outcome = 0
         self.vessel_name = "HC Bea-Luna"
@@ -67,7 +63,6 @@ class MainWindowEng(QWidget):
         self.ui.countBtn.clicked.connect(lambda: self.calculate(draft_lines=self.draft_lines,
                                                    stores_lines=self.stores_lines, density_line=self.ui.dens_f))
 
-        # TODO: export to excel
 
         # self.ui.export_2.clicked.connect(export.App(self.outcome))
         self.ui.export_2.clicked.connect(lambda: export.App(self.outcome, self.vessel_name))

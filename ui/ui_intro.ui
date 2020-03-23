@@ -78,7 +78,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap>HC_BEA_LUNAcr.jpg</pixmap>
+      <pixmap>img/HC_BEA_LUNAcr.jpg</pixmap>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -256,7 +256,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_2"/>
  </buttongroups>
 </ui>
