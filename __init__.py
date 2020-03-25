@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys
 
-import storage
+from . import storage
 # функция связи с БД
 get_connection = lambda: storage.connect('hydrostatic.sqlite')
 

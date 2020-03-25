@@ -1,5 +1,5 @@
-import export
 
-data = '2'
 
-export.App().saveFileDialog(data)
+def sum(a):
+    summ = a + a
+    return summ
