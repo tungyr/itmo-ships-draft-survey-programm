@@ -18,6 +18,9 @@ def connect(db_name=None):
     conn = sqlite3.connect(db_name)
     return conn
 
+def get_fm_db(conn, required_data):
+    if required_data == A_mean:
+
 
 # выборка двух значений отстояния кормовой осадки для интерполляции
 def get_aft_dist_interp(conn, A_mean):
