@@ -10,15 +10,24 @@ LBP = 123.175
 
 
 
-def aft_dist(A_mean):
+def aft_dist(A_mean) -> int:
     """функция поиска отстояния для поправки кормовой осадки"""
-    with get_connection() as conn:
-        a = storage.aft_dist_find(conn, A_mean)
-        if type(a) is tuple:
-            a = a[0]
-        a = round(a, 3)
-    return a
 
+    aft_distance = storage.aft_dist_find(A_mean)
+    if type(aft_distance) is tuple:
+        aft_distance = aft_distance[0]
+    aft_distance = round(aft_distance, 3)
+    return aft_distance
+
+
+# def aft_dist(A_mean):
+#     """функция поиска отстояния для поправки кормовой осадки"""
+#     with get_connection() as conn:
+#         a = storage.aft_dist_find(conn, A_mean)
+#         if type(a) is tuple:
+#             a = a[0]
+#         a = round(a, 3)
+#     return a
 
 def hydrostatic_values(MOMC, item):
     """функция поиска гидростатических параметров"""
