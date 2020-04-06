@@ -4,6 +4,7 @@ import os.path as Path
 import sqlite3
 
 
+
 SQL_SELECT_DIST_BY_AFT_DRAFT = 'SELECT DRAUGHT_DIST FROM AFT_DRAUGHT WHERE DRAUGHT=?'
 SQL_SELECT_DIST_BY_AFT_DRAFT_INTERP = 'SELECT DRAUGHT, DRAUGHT_DIST FROM AFT_DRAUGHT WHERE DRAUGHT<=?'
 SQL_SELECT_HYDROSTATIC_BY_MOMC = 'SELECT * FROM HYDROSTATIC WHERE DRAUGHT=?'
@@ -34,7 +35,7 @@ def get_fm_db(*args):
         # выборка из БД по округленной осадке
         with connect('hydrostatic.sqlite') as conn:
             cursor = conn.execute(SQL_SELECT_HYDROSTATIC_BY_MOMC, (args[1],))
-            return cursor.fetchmany(2)
+            return cursor.fetchone()
 
     elif args[0] == "hydrostatic_rounded":
         # выборка из БД по округленной осадке
@@ -63,7 +64,6 @@ def get_hydrostatic_interp(conn, MOMC):
         with conn:
             cursor = conn.execute(SQL_SELECT_HYDROSTATIC_BY_MOMC_INTERP, (round(MOMC_rounded, 4),))
             return cursor.fetchmany(2)
-
 
 
 
@@ -124,32 +124,71 @@ def aft_interp(A_mean, table_result):
         return draught_dist
 
 
-def hydrostatic_find(conn, MOMC, item):
+def hydrostatic_find(MOMC, item):
     # проверка необходимости интерполляции гидростатических данных
-    if MOMC * 100 % 2 == 0:
-        table_result = get_fm_db("hydrostatic", MOMC)
-        print(table_result)
-        return table_result
-    # try:
-    #     print('get_hydrostatic_check: ', get_hydrostatic(conn, MOMC)[1])
-    # except IndexError:
-    #     with conn:
-    #         # выборка двух значений для интерполляции
-    #         # table_result = get_hydrostatic_interp(conn, MOMC)
-    #         MOMC_rounded = round((MOMC - 0.01), 4)
-    #         table_result = get_fm_db("hydrostatic", MOMC_rounded)
-    #         return hydrostatic_interp(table_result, MOMC, item)
-    else:
-        # выборка одного прямого значения гидростатических данных
-        MOMC_rounded = round(MOMC, 2)
-        if MOMC_rounded * 100 % 2 == 0:
-            table_result = get_fm_db("hydrostatic_rounded", MOMC_rounded)
-            print(table_result)
+    # выборка одного прямого значения гидростатических данных без интерполяции
+    # MOMC_round = round(MOMC - 0.005, 2)
+    MOMC_round = float(str(MOMC)[:4])
+
+    if MOMC_round < 2:
+        MOMC_outbound = 2.0 + (2.0 - MOMC_round)
+
+        MOMC_round = MOMC_outbound
+
+        table_result = []
+        if MOMC_round * 100 % 2 == 0:
+            table_result.append(get_fm_db("hydrostatic", 2.0))
+            table_result.append(get_fm_db("hydrostatic", MOMC_round))
+            return hydrostatic_interp(table_result, MOMC, item)
         else:
-            MOMC_rounded = MOMC_rounded - 0.01
-            table_result = get_fm_db("hydrostatic_rounded", MOMC_rounded)
+            # TODO: check values like 2,9
+            MOMC_round -= 0.01
+            table_result.append(get_fm_db("hydrostatic", 2.0))
+            table_result.append(get_fm_db("hydrostatic", MOMC_round))
+            return hydrostatic_interp(table_result, MOMC, item)
+
+    if MOMC_round * 100 % 2 == 0:
+        table_result = get_fm_db("hydrostatic", MOMC_round)
+        return table_result[item]
+    else:
+        # TODO: check values like 2,9
+        MOMC_round -= 0.01
+        table_result = get_fm_db("hydrostatic_rounded", MOMC_round)
         return hydrostatic_interp(table_result, MOMC, item)
-    # return get_hydrostatic(MOMC)[item]
+
+
+    #
+    # MOMC_outbound = round(2.0 + (2.0 - MOMC), 2)
+    #     if MOMC_outbound * 100 % 2 == 0:
+    #         table_result = get_fm_db("hydrostatic", MOMC_outbound)
+    #         print(table_result[0], table_result[0][item])
+    #         return table_result[0][item]
+    #     else:
+    #         MOMC_outbound -= 0.01
+    #         table_result = get_fm_db("hydrostatic_rounded", MOMC_outbound)
+    #         return hydrostatic_interp(table_result, MOMC, item)
+    #
+    # if MOMC > 7.8:
+    # MOMC_outbound = round(2.0 + (2.0 - MOMC), 2)
+    #     if MOMC_outbound * 100 % 2 == 0:
+    #         table_result = get_fm_db("hydrostatic", MOMC_outbound)
+    #         print(table_result[0], table_result[0][item])
+    #         return table_result[0][item]
+    #     else:
+    #         MOMC_outbound -= 0.01
+    #         table_result = get_fm_db("hydrostatic_rounded", MOMC_outbound)
+    #         return hydrostatic_interp(table_result, MOMC, item)
+
+    # table_result[1], table_result[2],  = get_fm_db("hydrostatic", 2.0)
+    # table_result = get_fm_db("hydrostatic", 2.0 + (2.0 - MOMC))
+
+
+
+
+
+
+
+
 
 
 # def hydrostatic_find(conn, MOMC, item):
@@ -178,3 +217,5 @@ def hydrostatic_interp(table_result, MOMC, item):
     item_table_diff = second_pair[item] - first_pair[item]  # разница draught_dist по выбранным осадкам
     item_result = ((item_table_diff / draught_table_diff) * draught_diff + first_pair[item])
     return item_result
+
+

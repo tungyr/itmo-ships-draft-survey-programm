@@ -29,12 +29,12 @@ def aft_dist(A_mean) -> int:
 #         a = round(a, 3)
 #     return a
 
-def hydrostatic_values(MOMC, item):
-    """функция поиска гидростатических параметров"""
-    with get_connection() as conn:
-        hydrostatic_values = storage.hydrostatic_find(conn, MOMC, item)
-    return hydrostatic_values
 
+# def hydrostatic_values(MOMC, item):
+#     """функция поиска гидростатических параметров"""
+#     with get_connection() as conn:
+#         hydrostatic_values = storage.hydrostatic_find(conn, MOMC, item)
+#     return hydrostatic_values
 
 def calc(parameters):
     """основная функция расчета программы"""
@@ -76,9 +76,13 @@ def calc(parameters):
     MOMC = round((Fc + 6 * Mc + Ac) / 8, 3)
 
     #  выборка гидростатических значений через вычисленные данные
-    D_momc = round(hydrostatic_values(MOMC, 2), 3)
-    TPC = round(hydrostatic_values(MOMC, 3), 3)
-    LCF = round(hydrostatic_values(MOMC, 6), 3)
+    # D_momc = round(hydrostatic_values(MOMC, 2), 3)
+    # TPC = round(hydrostatic_values(MOMC, 3), 3)
+    # LCF = round(hydrostatic_values(MOMC, 6), 3)
+    D_momc = storage.hydrostatic_find(MOMC, 2)
+    TPC = storage.hydrostatic_find(MOMC, 3)
+    LCF = storage.hydrostatic_find(MOMC, 6)
+    print(D_momc, TPC, LCF)
 
     #  первая поправка за дифферент
     FTC = round(abs(true_trim * TPC * (LBP / 2 - LCF) / LBP * 100), 3)
@@ -95,13 +99,22 @@ def calc(parameters):
     increm = 0.50
 
     #  выборка тонн на см
-    MTC_momc = round(hydrostatic_values(MOMC, 4), 3)  # fm DB with interpolation by MOMC
+    # MTC_momc = round(hydrostatic_values(MOMC, 4), 3)  # fm DB with interpolation by MOMC
+    #
+    # #  выборка момент изменения дифферента +
+    # MTC_plus = round(hydrostatic_values(MOMC + increm, 4), 2) # fm DB with interpolation by MTC + increm
+    #
+    # #  выборка момент изменения дифферента -
+    # MTC_minus = round(hydrostatic_values(MOMC - increm, 4), 2)  # fm DB with interpolation by MTC - increm
+
+     # выборка тонн на см
+    MTC_momc = storage.hydrostatic_find(MOMC, 4)  # fm DB with interpolation by MOMC
 
     #  выборка момент изменения дифферента +
-    MTC_plus = round(hydrostatic_values(MOMC + increm, 4), 2) # fm DB with interpolation by MTC + increm
+    MTC_plus = storage.hydrostatic_find(MOMC + increm, 4) # fm DB with interpolation by MTC + increm
 
     #  выборка момент изменения дифферента -
-    MTC_minus = round(hydrostatic_values(MOMC - increm, 4), 2)  # fm DB with interpolation by MTC - increm
+    MTC_minus = storage.hydrostatic_find(MOMC - increm, 4)  # fm DB with interpolation by MTC - increm
 
     #  разница моментов изменения дифферента
     dM_dZ = round(MTC_plus - MTC_minus, 3)
