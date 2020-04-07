@@ -108,13 +108,13 @@ def calc(parameters):
     # MTC_minus = round(hydrostatic_values(MOMC - increm, 4), 2)  # fm DB with interpolation by MTC - increm
 
      # выборка тонн на см
-    MTC_momc = storage.hydrostatic_find(MOMC, 4)  # fm DB with interpolation by MOMC
+    MTC_momc = round(storage.hydrostatic_find(MOMC, 4), 2)  # fm DB with interpolation by MOMC
 
     #  выборка момент изменения дифферента +
-    MTC_plus = storage.hydrostatic_find(MOMC + increm, 4) # fm DB with interpolation by MTC + increm
+    MTC_plus = round(storage.hydrostatic_find(MOMC + increm, 4), 2) # fm DB with interpolation by MTC + increm
 
     #  выборка момент изменения дифферента -
-    MTC_minus = storage.hydrostatic_find(MOMC - increm, 4)  # fm DB with interpolation by MTC - increm
+    MTC_minus = round(storage.hydrostatic_find(MOMC - increm, 4), 2)  # fm DB with interpolation by MTC - increm
 
     #  разница моментов изменения дифферента
     dM_dZ = round(MTC_plus - MTC_minus, 3)
