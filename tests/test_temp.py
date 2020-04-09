@@ -1,3 +1,14 @@
+import pkgutil
+
+import sys
+
+print(sys.path)
+
+
+search_path = ['..'] # Используйте None, чтобы увидеть все модули, импортируемые из sys.path
+all_modules = [x[1] for x in pkgutil.iter_modules(path=search_path)]
+print(all_modules)
+
 import unittest
 # from .. import temp
 # from draft_survey.temp import sum

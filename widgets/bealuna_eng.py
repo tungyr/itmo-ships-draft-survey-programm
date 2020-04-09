@@ -26,7 +26,7 @@ class MainWindowEng(QWidget):
 
         # установка значений по умолчанию для полей
         for draft_line in self.draft_lines:
-            draft_line.setText('2.0')
+            draft_line.setText('6.3')
 
         for store_line in self.stores_lines:
             store_line.setText('100')
