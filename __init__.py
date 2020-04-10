@@ -10,10 +10,10 @@ LBP = 123.175
 
 
 
-def aft_dist(A_mean) -> int:
+def aft_dist(a_mean) -> int:
     """функция поиска отстояния для поправки кормовой осадки"""
 
-    aft_distance = storage.aft_dist_find(A_mean)
+    aft_distance = storage.aft_dist_find(a_mean)
     if type(aft_distance) is tuple:
         aft_distance = aft_distance[0]
     aft_distance = round(aft_distance, 3)
