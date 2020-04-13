@@ -72,73 +72,125 @@ def aft_dist_find(a_mean) -> (tuple, int, int, tuple):
 
 def hydrostatic_find(momc, db_column):
     # подготовка входных данных для выборки из базы данных
-    momc_round = float(str(momc)[:4])
+    # momc_round = float(str(momc)[:4])
 
-    if momc_round < 2:
-        momc_outbound = 2 + (2 - momc_round)
+    if momc < 2:
+        momc_outbound = 2 + (2 - momc)
 
-        table_result = []
-        if momc_outbound * 100 % 2 == 0:
-            table_result.append(get_fm_db("hydrostatic", 2.0))
-            table_result.append(get_fm_db("hydrostatic", momc_outbound))
-            # return hydrostatic_interp(table_result, MOMC, item)
-            return interpolation(table_result, momc, db_column)
-        else:
-            momc_outbound -= 0.01
-            momc_outbound = float('%.2f' % (momc_outbound))
+        momc_round = float(str(momc_outbound)[:4])
 
-            # выбираем ближайшее значение к momc_outbound из БД для интерполяции
-            table_result_outbound = get_fm_db("hydrostatic_rounded", momc_outbound)
+        if momc_round * 100 % 2 != 0:
+            momc_round -= 0.01
 
-            # интерполируем значение momc_outbound к оригинальному и по нему находим истинный item
-            item_interp_result = hydrostatic_interp(table_result=table_result_outbound, momc=momc_outbound + 0.01, item=db_column)
+        # выбираем ближайшее значение к momc_outbound из БД для интерполяции
+        table_result_outbound = get_fm_db("hydrostatic_rounded", momc_round)
 
-            # подготовка данных для расчета интерполированого значения item
-            table_result.append(get_fm_db("hydrostatic", 2.0))
-
-            # временный список для выборки данных из него функцией hydrostatic_interp
-            temp_list = list(range(0, 8))
-            temp_list[0], temp_list[db_column]= momc_outbound + 0.01, item_interp_result
-            table_result.append(temp_list)
-            return hydrostatic_interp(table_result, momc, db_column)
-
-    elif momc_round > 7.8:
-        momc_outbound = 7.8 - (momc_round - 7.8)
-        momc_outbound = float('%.2f' % (momc_outbound))
+        # интерполируем значение momc_outbound к оригинальному и по нему находим истинный item
+        item_interp_result = interpolation(table_result_outbound, momc_outbound, db_column)
 
         table_result = []
-        if momc_outbound * 100 % 2 == 0:
-            table_result.append(get_fm_db("hydrostatic", momc_outbound))
-            table_result.append(get_fm_db("hydrostatic", 7.8))
-            return hydrostatic_interp(table_result, momc, db_column)
-        else:
-            momc_outbound -= 0.01
-            momc_outbound = float('%.2f' % (momc_outbound))
+        # временный список для выборки данных из него функцией hydrostatic_interp
+        temp_list = list(range(0, 8))
+        table_result.append(get_fm_db("hydrostatic", 2.0))
+        temp_list[0], temp_list[db_column]= momc_outbound, item_interp_result
+        table_result.append(temp_list)
+        return interpolation(table_result, momc, db_column)
+        # if momc_round * 100 % 2 == 0:
+        #     table_result.append(get_fm_db("hydrostatic", 2.0))
+        #     table_result.append(get_fm_db("hydrostatic", momc_round))
+        #     # return hydrostatic_interp(table_result, MOMC, item)
+        #     return interpolation(table_result, momc_outbound, db_column)
+        # else:
+        #     momc_round -= 0.01
+        #     # momc_outbound = float('%.2f' % (momc_outbound))
+        #
+        #     # выбираем ближайшее значение к momc_outbound из БД для интерполяции
+        #     table_result_outbound = get_fm_db("hydrostatic_rounded", momc_outbound)
+        #
+        #     # интерполируем значение momc_outbound к оригинальному и по нему находим истинный item
+        #     item_interp_result = interpolation(table_result_outbound, momc_outbound + 0.01, db_column)
+        #
+        #     # подготовка данных для расчета интерполированого значения item
+        #     table_result.append(get_fm_db("hydrostatic", 2.0))
+        #
+        #     # временный список для выборки данных из него функцией hydrostatic_interp
+        #     temp_list = list(range(0, 8))
+        #     temp_list[0], temp_list[db_column]= momc_outbound + 0.01, item_interp_result
+        #     table_result.append(temp_list)
+        #     return interpolation(table_result, momc, db_column)
 
-            # выбираем ближайшее значение к momc_outbound из БД для интерполяции
-            table_result_outbound = get_fm_db("hydrostatic_rounded", momc_outbound)
+    elif momc > 7.8:
+        momc_outbound = 7.8 - (momc - 7.8)
+        momc_round = float('%.2f' % (momc_outbound))
 
-            # интерполируем значение momc_outbound к оригинальному и по нему находим истинный item
-            item_interp_result = hydrostatic_interp(table_result=table_result_outbound, momc=momc_outbound + 0.01, item=db_column)
+        if momc_round * 100 % 2 != 0:
+            momc_round -= 0.01
 
-            # подготовка данных для расчета интерполированого значения item
-            # временный список для выборки данных из него функцией hydrostatic_interp
-            temp_list = list(range(0, 8))
-            temp_list[0], temp_list[db_column]= momc_outbound + 0.01, item_interp_result
-            table_result.append(temp_list)
-            table_result.append(get_fm_db("hydrostatic", 7.8))
-            return hydrostatic_interp(table_result, momc, db_column)
+        # выбираем ближайшее значение к momc_outbound из БД для интерполяции
+        table_result_outbound = get_fm_db("hydrostatic_rounded", momc_round)
+
+        # интерполируем значение momc_outbound к оригинальному и по нему находим истинный item
+        item_interp_result = interpolation(table_result_outbound, momc_outbound, db_column)
+
+        # подготовка данных для расчета интерполированого значения item
+        table_result = []
+        # временный список для выборки данных из него функцией hydrostatic_interp
+        temp_list = list(range(0, 8))
+        temp_list[0], temp_list[db_column]= momc_outbound, item_interp_result
+        table_result.append(temp_list)
+        table_result.append(get_fm_db("hydrostatic", 7.8))
+        return interpolation(table_result, momc, db_column)
 
     else:
         if momc * 100 % 2 == 0:
             table_result = get_fm_db("hydrostatic", momc)
             return table_result[db_column]
         else:
+            momc_round = float(str(momc)[:4])
             momc_round -= 0.01
             momc_round = round(momc_round, 2)
             table_result = get_fm_db("hydrostatic_rounded", momc_round)
             return interpolation(table_result, momc, db_column)
 
+
+# elif momc > 7.8:
+# momc_outbound = 7.8 - (momc - 7.8)
+# momc_round = float('%.2f' % (momc_outbound))
+#
+# if momc_round * 100 % 2 != 0:
+#     momc_round -= 0.01
+#
+# if momc_outbound * 100 % 2 == 0:
+#     table_result.append(get_fm_db("hydrostatic", momc_outbound))
+#     table_result.append(get_fm_db("hydrostatic", 7.8))
+#     return interpolation(table_result, momc, db_column)
+# else:
+#     momc_outbound -= 0.01
+#     momc_round = float('%.2f' % (momc_outbound))
+#
+#     # выбираем ближайшее значение к momc_outbound из БД для интерполяции
+#     table_result_outbound = get_fm_db("hydrostatic_rounded", momc_outbound)
+#
+#     # интерполируем значение momc_outbound к оригинальному и по нему находим истинный item
+#     item_interp_result = interpolation(table_result_outbound, momc_outbound + 0.01, db_column)
+#
+#     # подготовка данных для расчета интерполированого значения item
+#     # временный список для выборки данных из него функцией hydrostatic_interp
+#     temp_list = list(range(0, 8))
+#     temp_list[0], temp_list[db_column] = momc_outbound + 0.01, item_interp_result
+#     table_result.append(temp_list)
+#     table_result.append(get_fm_db("hydrostatic", 7.8))
+#     return interpolation(table_result, momc, db_column)
+#
+# else:
+# if momc * 100 % 2 == 0:
+#     table_result = get_fm_db("hydrostatic", momc)
+#     return table_result[db_column]
+# else:
+#     momc_round -= 0.01
+#     momc_round = round(momc_round, 2)
+#     table_result = get_fm_db("hydrostatic_rounded", momc_round)
+#     return interpolation(table_result, momc, db_column)
 
  # функция интерполляции для гидростатических данных
 def hydrostatic_interp(table_result, momc, item):
@@ -158,16 +210,16 @@ def interpolation(db_data, draught_value, db_column):
         # проверка на значение из начала таблицы с положительными draught_dist
         draught_dist = ((db_column_values_diff / draughts_db_diff) * draught_entry_db_diff + first_db_value[1])
         return draught_dist
-    db_column_values_diff = second_db_value[db_column] - first_db_value[db_column]
     result = ((db_column_values_diff / draughts_db_diff) * draught_entry_db_diff + first_db_value[db_column])
     return result
 
 if __name__ == "__main__":
 
-    print(hydrostatic_find(1.635, 2))
+    print(hydrostatic_find(1.635123, 2))
+    print(hydrostatic_find(8.2148456, 2))
     # print(aft_dist_find(6.99))
     # print(aft_dist_find(6.3))
-    # print(aft_dist_find(8))
+
     # print(aft_dist_find(5.55))
 
 
