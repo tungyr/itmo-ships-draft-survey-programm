@@ -80,7 +80,8 @@ def hydrostatic_find(momc, db_column):
         momc_round = float(str(momc_outbound)[:4])
 
         if momc_round * 100 % 2 != 0:
-            momc_round -= 0.01
+            momc_round = round(momc_round - 0.01, 2)
+
 
         # выбираем ближайшее значение к momc_outbound из БД для интерполяции
         table_result_outbound = get_fm_db("hydrostatic_rounded", momc_round)
@@ -121,10 +122,11 @@ def hydrostatic_find(momc, db_column):
 
     elif momc > 7.8:
         momc_outbound = 7.8 - (momc - 7.8)
-        momc_round = float('%.2f' % (momc_outbound))
+        momc_round = float(str(momc_outbound)[:4])
 
         if momc_round * 100 % 2 != 0:
-            momc_round -= 0.01
+            momc_round = momc_round - 0.01
+            momc_round = float(str(momc_round)[:4])
 
         # выбираем ближайшее значение к momc_outbound из БД для интерполяции
         table_result_outbound = get_fm_db("hydrostatic_rounded", momc_round)
@@ -142,15 +144,11 @@ def hydrostatic_find(momc, db_column):
         return interpolation(table_result, momc, db_column)
 
     else:
-        if momc * 100 % 2 == 0:
-            table_result = get_fm_db("hydrostatic", momc)
-            return table_result[db_column]
-        else:
-            momc_round = float(str(momc)[:4])
-            momc_round -= 0.01
-            momc_round = round(momc_round, 2)
-            table_result = get_fm_db("hydrostatic_rounded", momc_round)
-            return interpolation(table_result, momc, db_column)
+        momc_round = float(str(momc)[:4])
+        if momc_round * 100 % 2 != 0:
+            momc_round = round(momc_round - 0.01, 2)
+        table_result = get_fm_db("hydrostatic_rounded", momc_round)
+        return interpolation(table_result, momc, db_column)
 
 
 # elif momc > 7.8:
@@ -193,13 +191,13 @@ def hydrostatic_find(momc, db_column):
 #     return interpolation(table_result, momc, db_column)
 
  # функция интерполляции для гидростатических данных
-def hydrostatic_interp(table_result, momc, item):
-    first_pair, second_pair = table_result[0], table_result[1]
-    draught_diff = momc - first_pair[0]   # вычитание полученной осадки и первоначальной
-    draught_table_diff = second_pair[0] - first_pair[0]   # разница осадок
-    item_table_diff = second_pair[item] - first_pair[item]  # разница draught_dist по выбранным осадкам
-    item_result = ((item_table_diff / draught_table_diff) * draught_diff + first_pair[item])
-    return item_result
+# def hydrostatic_interp(table_result, momc, item):
+#     first_pair, second_pair = table_result[0], table_result[1]
+#     draught_diff = momc - first_pair[0]   # вычитание полученной осадки и первоначальной
+#     draught_table_diff = second_pair[0] - first_pair[0]   # разница осадок
+#     item_table_diff = second_pair[item] - first_pair[item]  # разница draught_dist по выбранным осадкам
+#     item_result = ((item_table_diff / draught_table_diff) * draught_diff + first_pair[item])
+#     return item_result
 
 def interpolation(db_data, draught_value, db_column):
     first_db_value, second_db_value = db_data[0], db_data[1]
@@ -215,7 +213,11 @@ def interpolation(db_data, draught_value, db_column):
 
 if __name__ == "__main__":
 
-    print(hydrostatic_find(1.635123, 2))
+    # print(hydrostatic_find(1.635123, 2))
+
+    # print(hydrostatic_find(1.625123, 2))
+    # print(hydrostatic_find(5.45999, 2))
+    print(hydrostatic_find(7.96199, 2))
     print(hydrostatic_find(8.2148456, 2))
     # print(aft_dist_find(6.99))
     # print(aft_dist_find(6.3))
