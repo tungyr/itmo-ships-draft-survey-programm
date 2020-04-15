@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys
 
-import storage
+from project import storage
 # функция связи с БД
 get_connection = lambda: storage.connect('hydrostatic.sqlite')
 
@@ -10,43 +10,28 @@ LBP = 123.175
 
 
 
-def aft_dist(a_mean) -> int:
-    """функция поиска отстояния для поправки кормовой осадки"""
+def aft_dist(a_mean) -> float:
+    """Функция поиска отстояния для поправки кормовой осадки"""
 
-    aft_distance = storage.aft_dist_find(a_mean)
+    aft_distance = storage.aft_dist_data(a_mean)
     if type(aft_distance) is tuple:
         aft_distance = aft_distance[0]
     aft_distance = round(aft_distance, 3)
     return aft_distance
 
-
-# def aft_dist(A_mean):
-#     """функция поиска отстояния для поправки кормовой осадки"""
-#     with get_connection() as conn:
-#         a = storage.aft_dist_find(conn, A_mean)
-#         if type(a) is tuple:
-#             a = a[0]
-#         a = round(a, 3)
-#     return a
-
-
-# def hydrostatic_values(MOMC, item):
-#     """функция поиска гидростатических параметров"""
-#     with get_connection() as conn:
-#         hydrostatic_values = storage.hydrostatic_find(conn, MOMC, item)
-#     return hydrostatic_values
-
 def calc(parameters):
-    """основная функция расчета программы"""
+    """Основная функция расчета программы"""
+
     #  определение средних осадок
     F_mean = round((parameters['fwd_ps'] + parameters['fwd_ss']) / 2, 3)
     M_mean = round((parameters['mid_ps'] + parameters['mid_ss']) / 2, 3)
     A_mean = round((parameters['aft_ps'] + parameters['aft_ss']) / 2, 3)
 
-    #  отстояния для поправок осадок
+    # определение отстояний для поправок осадок
     f_delta = -2.095
     m_delta = 1.078
-    a_delta = aft_dist(A_mean)  # обращение к функции поиска отстояния кормовой поправки
+    # обращение к функции поиска отстояния кормовой поправки
+    a_delta = aft_dist(A_mean)
 
     # вычисление дифферента
     app_trim = round((A_mean - F_mean), 3)
@@ -75,46 +60,30 @@ def calc(parameters):
     #  вычисление средней осадки судна
     MOMC = round((Fc + 6 * Mc + Ac) / 8, 3)
 
-    #  выборка гидростатических значений через вычисленные данные
-    # D_momc = round(hydrostatic_values(MOMC, 2), 3)
-    # TPC = round(hydrostatic_values(MOMC, 3), 3)
-    # LCF = round(hydrostatic_values(MOMC, 6), 3)
-    D_momc = storage.hydrostatic_find(MOMC, 2)
-    TPC = storage.hydrostatic_find(MOMC, 3)
-    LCF = storage.hydrostatic_find(MOMC, 6)
-    print(D_momc, TPC, LCF)
+    #  вычисление гидростатических значений
+    D_momc = round(storage.hydrostatic_data(MOMC, 2), 2)
+    TPC = storage.hydrostatic_data(MOMC, 3)
+    LCF = storage.hydrostatic_data(MOMC, 6)
 
     #  первая поправка за дифферент
     FTC = round(abs(true_trim * TPC * (LBP / 2 - LCF) / LBP * 100), 3)
 
+    #TODO: test
     #  определение знака первой поправки
     if LBP/2 < LCF and true_trim > 0:
-        FTC = FTC * -1
-    elif LBP/2 > LCF and true_trim < 0:
-        FTC = FTC * -1
-    else:
-        FTC = FTC  # ?
+        FTC *= -1
 
     #  величина разброса для интерполляции в БД
     increm = 0.50
 
-    #  выборка тонн на см
-    # MTC_momc = round(hydrostatic_values(MOMC, 4), 3)  # fm DB with interpolation by MOMC
-    #
-    # #  выборка момент изменения дифферента +
-    # MTC_plus = round(hydrostatic_values(MOMC + increm, 4), 2) # fm DB with interpolation by MTC + increm
-    #
-    # #  выборка момент изменения дифферента -
-    # MTC_minus = round(hydrostatic_values(MOMC - increm, 4), 2)  # fm DB with interpolation by MTC - increm
-
      # выборка тонн на см
-    MTC_momc = round(storage.hydrostatic_find(MOMC, 4), 2)  # fm DB with interpolation by MOMC
+    MTC_momc = round(storage.hydrostatic_data(MOMC, 4), 2)  # fm DB with interpolation by MOMC
 
     #  выборка момент изменения дифферента +
-    MTC_plus = round(storage.hydrostatic_find(MOMC + increm, 4), 2) # fm DB with interpolation by MTC + increm
+    MTC_plus = round(storage.hydrostatic_data(MOMC + increm, 4), 2) # fm DB with interpolation by MTC + increm
 
     #  выборка момент изменения дифферента -
-    MTC_minus = round(storage.hydrostatic_find(MOMC - increm, 4), 2)  # fm DB with interpolation by MTC - increm
+    MTC_minus = round(storage.hydrostatic_data(MOMC - increm, 4), 2)  # fm DB with interpolation by MTC - increm
 
     #  разница моментов изменения дифферента
     dM_dZ = round(MTC_plus - MTC_minus, 3)
@@ -125,7 +94,7 @@ def calc(parameters):
     # водоизмещение скорректированное за дифферент
     D_trim = round(D_momc + FTC + STC, 3)
 
-    #  водоизмещение итоговое
+    #  корреция за плотность воды
     D_corr = round(D_trim * parameters['density'] / 1.025, 3)
 
     #  судно порожнем
@@ -135,23 +104,19 @@ def calc(parameters):
     total = parameters['ballast'] + parameters['fw'] + parameters['hfo'] + parameters['mgo'] + parameters['lo'] + \
              parameters['slops'] + parameters['sludge'] + parameters['other']
 
-    # TODO: constant?
     constant = 0
     #  постоянный мертвый вес судна
-    if D_corr == 0:
-        constant == 0
-    else:
-        constant = round(D_corr - lihgt_ship - total, 3)
+    constant = round(D_corr - lihgt_ship - total, 3)
+
     #  возвращение результатов расчетов в форму программы
-    evrthng = (F_mean, M_mean, A_mean, f_delta, m_delta, a_delta, app_trim, dF,
+    result = (F_mean, M_mean, A_mean, f_delta, m_delta, a_delta, app_trim, dF,
                dM, dA, Fc, Mc, Ac, true_trim, defl_mean, MOMC, D_momc, TPC,
                LCF, FTC, MTC_momc, MTC_plus, MTC_minus, dM_dZ, STC, D_trim,
                constant, D_corr)
 
-    return evrthng
+    return result
 
 
 if __name__ == '__main__':
     calc()
     aft_dist()
-    hydrostatic_values()

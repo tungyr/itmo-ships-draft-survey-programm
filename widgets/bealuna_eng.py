@@ -9,7 +9,7 @@ from ui.ui_bealuna_eng import Ui_Form
 
 
 class MainWindowEng(QWidget):
-    def __init__(self, parent=None) -> object:
+    def __init__(self, parent=None):
         super(MainWindowEng, self).__init__(parent)
 
         self.ui = Ui_Form()   # использование модуля с настройками интерфейса программы
@@ -26,61 +26,38 @@ class MainWindowEng(QWidget):
 
         # установка значений по умолчанию для полей
         for draft_line in self.draft_lines:
-            draft_line.setText('6.3')
+            draft_line.setText('2.0')
 
         for store_line in self.stores_lines:
             store_line.setText('100')
 
         self.ui.dens_f.setText('1.025')
 
-        # # всплывающие подсказки для полей осадок
+        # всплывающие подсказки для полей осадок
         for draft_line in self.draft_lines:
             draft_line.setToolTip('Applicable draft values only: 2 - 7.8')
-
-        # определение валидаторов на основе регулярных выражения для полей осадок
-        # reg_draft = QRegExp("([2-8])([.])\d{1,3}")
-        # input_validator = QRegExpValidator(reg_draft)
-        #
-        # for draft_line in self.draft_lines:
-        #     draft_line.setValidator(input_validator)
-        #
-
-
-        # # валидатор для поля плотности воды
-        # reg_dens = QRegExp("([0-2])([.])\d{1,3}")
-        # input_validator = QRegExpValidator(reg_dens, self.ui.dens_f)
-        # self.ui.dens_f.setValidator(input_validator)
-        # self.ui.dens_f.setToolTip("Applicable density values only: 0.1 - 2")
-        #
-        # # валидоторы полей запасов
-        # reg_stores = QRegExp("\d{1,4}[.]\d{1,3}")
-        # input_validator_stores = QRegExpValidator(reg_stores)
-        #
-        # for store_line in self.stores_lines:
-        #     store_line.setValidator(input_validator_stores)
-
 
         self.ui.countBtn.clicked.connect(lambda: self.calculate(draft_lines=self.draft_lines,
                                                    stores_lines=self.stores_lines, density_line=self.ui.dens_f))
 
-
-        # self.ui.export_2.clicked.connect(export.App(self.outcome))
+        # обработка нажатия кнопки экспортирования данных в отчет
         self.ui.export_2.clicked.connect(lambda: export.App(self.outcome, self.vessel_name))
 
+        # обработка нажатия кнопки очистки данных полей
         self.ui.clear.clicked.connect(lambda: self.clear_forms())
 
+        # обработка нажатия кнопки возвращения в главное меню
         self.ui.main_menu.clicked.connect(lambda: intro_window())
 
-        def intro_window():
+        def intro_window() -> None:
+            """Функция запуска приветственного окна"""
             self.main_win = intro.IntroWindow()
             self.main_win.show()
             self.close()
 
-        # self.ui.main_menu.clicked.connect(lambda: print('pushed'))
 
-
-
-    def clear_forms(self):
+    def clear_forms(self) -> None:
+        """Функция очистки полей от значений"""
         for draft_line in self.draft_lines:
             draft_line.setText('')
 
@@ -91,12 +68,8 @@ class MainWindowEng(QWidget):
 
         self.ui.result.setText('')
 
-
-
-
-
-
-    def calculate(self, draft_lines, stores_lines, density_line):
+    def calculate(self, draft_lines, stores_lines, density_line) -> (None, tuple):
+        """Функция расчета введенных данных"""
 
         validates_result = self.validate_forms(draft_lines=self.draft_lines, stores_lines=self.stores_lines,
                                                density_line=self.ui.dens_f)
@@ -141,6 +114,7 @@ class MainWindowEng(QWidget):
 
 
     def validate_forms(self, draft_lines, stores_lines, density_line) -> (list, list, float):
+        """Функция валидации введенных пользователем данных"""
 
         try:
             draft_lines = [float(draft_line.text()) for draft_line in draft_lines]
@@ -153,7 +127,7 @@ class MainWindowEng(QWidget):
             return
 
         try:
-            stores_lines = [int(store_line.text()) for store_line in stores_lines]
+            stores_lines = [float(store_line.text()) for store_line in stores_lines]
         except ValueError:
             warn = QMessageBox.warning(self, 'Message',
                                        "Stores not filled up!" + "\n", QMessageBox.Ok)
