@@ -3,31 +3,30 @@
 import sys
 
 
-def calc_momc(fwd_ps, fwd_ss, mid_ps, mid_ss, aft_ps, aft_ss, lbp,
-              fwd_delta, mid_delta, aft_delta):
+def calc_momc(params):
 
-    print('mid_ps: ', mid_ps)
-    print('mid_ss: ', mid_ss)
-    print('aft_ps: ', aft_ps)
-    print('aft_ss: ', aft_ss)
+    print('mid_ps: ', params['mid_ps'])
+    print('mid_ss: ', params['mid_ss'])
+    print('aft_ps: ', params['aft_ps'])
+    print('aft_ss: ', params['aft_ss'])
 
-    F_mean = round((fwd_ps + fwd_ss) / 2, 3)
-    M_mean = round((mid_ps + mid_ss) / 2, 3)
-    A_mean = round((aft_ps + aft_ss) / 2, 3)
+    F_mean = round((params['fwd_ps'] + params['fwd_ss']) / 2, 3)
+    M_mean = round((params['mid_ps'] + params['mid_ss']) / 2, 3)
+    A_mean = round((params['aft_ps'] + params['aft_ss']) / 2, 3)
 
     print('F_mean: ', F_mean)
     print('M_mean: ', M_mean)
     print('A_mean: ', A_mean)
 
-    print('a_delta: ', aft_delta, type(aft_delta))
+    print('a_delta: ', params['aft_delta'], type(params['aft_delta']))
 
     app_trim = round((A_mean - F_mean), 3)
 
     print('app_trim: ', app_trim)
 
-    dF = round(app_trim * fwd_delta / lbp, 3)
-    dM = round(app_trim * mid_delta / lbp, 3)
-    dA = round(app_trim * aft_delta / lbp, 3)
+    dF = round(app_trim * params['fwd_delta'] / params['lbp'], 3)
+    dM = round(app_trim * params['mid_delta'] / params['lbp'], 3)
+    dA = round(app_trim * params['aft_delta'] / params['lbp'], 3)
 
     print('dF: ', dF)
     print('dM: ', dM)
@@ -49,58 +48,52 @@ def calc_momc(fwd_ps, fwd_ss, mid_ps, mid_ss, aft_ps, aft_ss, lbp,
     print('defl: ', defl)
 
     if (Mc - (Fc + Ac) / 2) > 0:
-        defl_mean = "Sagging - Прогиб"
-        print("Sagging - Прогиб")
+        defl_mean = "Sagging"
     else:
-        defl_mean = "Hogging - Выгиб"
-        print("Hogging - Выгиб")
+        defl_mean = "Hogging"
 
     MOMC = round((Fc + 6 * Mc + Ac) / 8, 3)
 
-    evrthng = (F_mean, M_mean, A_mean, app_trim, dF,
+    result = (F_mean, M_mean, A_mean, app_trim, dF,
                dM, dA, Fc, Mc, Ac, true_trim, defl_mean, MOMC)
 
-    return evrthng
+    return result
 
 
-def calc_displ(lbp, true_trim, dens, displ_momc, tpc, lcf, mtc, mtc_plus,
-                    mtc_minus, light_ship, ballast, fw, hfo,
-                    mgo, lo, slops, sludge, other):
+def calc_displ(params):
 
+    print('D_momc: ', params['displ_momc'])
+    print('TPC: ', params['tpc'])
+    print('LCF: ', params['lcf'])
 
-
-    print('D_momc: ', displ_momc)
-    print('TPC: ', tpc)
-    print('LCF: ', lcf)
-
-    FTC = round((abs(true_trim * tpc * (lbp / 2 - lcf) / lbp * 100)), 3)
+    FTC = round((abs(params['true_trim'] * params['tpc'] * (params['lbp'] / 2 - params['lcf']) / params['lbp'] * 100)), 3)
 
     print('FTC: ', FTC)
 
-    if lbp/2 < lcf and true_trim > 0:
+    if params['lbp']/2 < params['lcf'] and ['true_trim'] > 0:
         FTC = FTC * -1
-    elif lbp/2 > lcf and true_trim < 0:
+    elif params['lbp']/2 > params['lcf'] and params['true_trim'] < 0:
         FTC = FTC * -1
     else:
         FTC = FTC  # ?
 
-    dM_dZ = round(mtc_plus - mtc_minus, 3)
+    dM_dZ = round(params['mtc_plus'] - params['mtc_minus'], 3)
 
     print('dM_dZ: ', dM_dZ)
 
-    STC = round(((true_trim * true_trim * dM_dZ * 50.0) / lbp), 3)
+    STC = round(((params['true_trim'] * params['true_trim'] * dM_dZ * 50.0) / params['lbp']), 3)
 
     print('STC: ', STC)
 
-    D_trim = round(displ_momc + FTC + STC, 3)
+    D_trim = round(params['displ_momc'] + FTC + STC, 3)
 
     print('D_trim: ', D_trim)
 
-    D_corr = round(D_trim * dens / 1.025, 3)
+    D_corr = round(D_trim * params['dens'] / 1.025, 3)
 
     print('D_corr: ', D_corr)
 
-    total = ballast + fw + hfo + mgo + lo + slops + sludge + other
+    total = params['ballast'] + params['fw'] + params['hfo'] + params['mgo'] + params['lo'] + params['slops'] + params['sludge'] + params['other']
 
     print('total: ', total)
 
@@ -109,11 +102,11 @@ def calc_displ(lbp, true_trim, dens, displ_momc, tpc, lcf, mtc, mtc_plus,
     if D_corr == 0:
         constant == 0
     else:
-        constant = round(D_corr - light_ship - total, 3)
+        constant = round(D_corr - params['light_ship'] - total, 3)
 
-    evrthng = (FTC, dM_dZ, STC, D_trim, constant, D_corr)
+    result = (FTC, dM_dZ, STC, D_trim, constant, D_corr)
 
-    return evrthng
+    return result
 
 
 if __name__ == '__main__':

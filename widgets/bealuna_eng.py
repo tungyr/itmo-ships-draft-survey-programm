@@ -37,6 +37,7 @@ class MainWindowEng(QWidget):
         for draft_line in self.draft_lines:
             draft_line.setToolTip('Applicable draft values only: 2 - 7.8')
 
+        # обработка нажатия кнопки расчета
         self.ui.countBtn.clicked.connect(lambda: self.calculate(draft_lines=self.draft_lines,
                                                    stores_lines=self.stores_lines, density_line=self.ui.dens_f))
 
@@ -136,7 +137,6 @@ class MainWindowEng(QWidget):
         if max(draft_lines) > 7.8 or min(draft_lines) < 2.0:
             warn = QMessageBox.warning(self, 'Message',
                                        "Applicable draft values only: 2 - 7.8"
-                                       + "\n" + "Applicable density values only: 0.1 - 2"
                                        + "\n", QMessageBox.Ok)
 
             return

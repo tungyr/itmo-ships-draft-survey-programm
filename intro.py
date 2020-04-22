@@ -35,7 +35,7 @@ class IntroWindow(QWidget):
             self.close()
 
         elif self.ui_intro.eng_radiobtn.isChecked() and self.ui_intro.anyvsl_radiobtn.isChecked():
-            self.main_win = anyvsl_eng.mainwindow_eng()
+            self.main_win = anyvsl_eng.MainWindowEng()
             self.main_win.show()
             self.close()
 
