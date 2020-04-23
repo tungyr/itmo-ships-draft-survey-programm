@@ -8,8 +8,7 @@ from functools import partial
 from PyQt5.QtCore import QRegExp
 from PyQt5.QtGui import QRegExpValidator
 
-import anyvsl_init
-import __init__, export, intro
+from project import anyvsl_init, export, intro
 
 from ui.ui_anyvsl_eng import Ui_Form
 
@@ -20,11 +19,8 @@ class MainWindowEng(QWidget):
 
         self.ui = Ui_Form()
         self.ui.setupUi(self)
-
-        self.vessel_name = self.ui.ships_name.text()
-
-        self.result_label_momc = ''
-        self.result_label_displ = ''
+        self.result_momc = ()
+        self.result_displ = ()
 
         self.draft_lines = (self.ui.F_ps_line, self.ui.F_ss_line, self.ui.M_ps_line, self.ui.M_ss_line,
                             self.ui.A_ps_line, self.ui.A_ss_line)
@@ -64,10 +60,10 @@ class MainWindowEng(QWidget):
         for draft_line in self.draft_lines:
             draft_line.setToolTip('Applicable draft values only: 2 - 7.8')
 
-
         self.ui.countBtn_momc.clicked.connect(self.calculate_momc)
-        # обработка нажатия кнопки экспортирования данных в отчет
-        self.ui.export_2.clicked.connect(lambda: export.App(self.outcome, self.vessel_name))
+        # # обработка нажатия кнопки экспортирования данных в отчет
+        self.ui.export_2.clicked.connect(lambda: export.App(self.result_momc + self.result_displ,
+                                                            vessel_name=self.ui.ships_name.text()))
         # обработка нажатия кнопки очистки данных полей
         self.ui.clear.clicked.connect(lambda: self.clear_forms())
         # обработка нажатия кнопки возвращения в главное меню
@@ -111,22 +107,23 @@ class MainWindowEng(QWidget):
         params = dict(zip(params_labels, params_values))
 
         # вызов функции расчета с передачей параметров
-        outcome = anyvsl_init.calc_momc(params=params)
+        self.result_momc = anyvsl_init.calc_momc(params=params)
 
-        self.result_label_momc = (str(outcome[0]) + '; ' + str(outcome[1]) + '; ' + str(outcome[2]) + '\n' +
-                                str(params['fwd_delta']) + '\n' +
-                                str(params['mid_delta']) + '\n' +
-                                str(params['aft_delta']) + '\n' +
-                                str(outcome[3]) + '\n' +
-                                str(outcome[4]) + '\n' +
-                                str(outcome[5]) + '\n' +
-                                str(outcome[6]) + '\n' +
-                                str(outcome[7]) + '\n' +
-                                str(outcome[8]) + '\n' +
-                                str(outcome[9]) + '\n' +
-                                str(outcome[10]) + '\n' +
-                                str(outcome[11]) + '\n' +
-                                str(outcome[12]) + '\n')
+        self.result_label_momc = (str(self.result_momc[0]) + '; ' + str(self.result_momc[1]) + '; '
+                                + str(self.result_momc[2]) + '\n' +
+                                str(self.result_momc[3]) + '\n' +
+                                str(self.result_momc[4]) + '\n' +
+                                str(self.result_momc[5]) + '\n' +
+                                str(self.result_momc[6]) + '\n' +
+                                str(self.result_momc[7]) + '\n' +
+                                str(self.result_momc[8]) + '\n' +
+                                str(self.result_momc[9]) + '\n' +
+                                str(self.result_momc[10]) + '\n' +
+                                str(self.result_momc[11]) + '\n' +
+                                str(self.result_momc[12]) + '\n' +
+                                str(self.result_momc[13]) + '\n' +
+                                str(self.result_momc[14]) + '\n' +
+                                str(self.result_momc[15]) + '\n')
 
         self.ui.result_anyvsl.setText(str(self.result_label_momc))
 
@@ -155,7 +152,7 @@ class MainWindowEng(QWidget):
                             + "\n", QMessageBox.Ok)
 
         self.ui.countBtn_displ.clicked.connect(partial(self.calculate_displ, params['lbp'], params['dens'],
-                                                       true_trim=outcome[10]))
+                                                       true_trim=self.result_momc[13]))
 
 
     def calculate_displ(self, lbp, dens, true_trim):
@@ -172,23 +169,23 @@ class MainWindowEng(QWidget):
         params = dict(zip(params_labels, params_values))
 
         # вызов функции расчета с передачей параметров
-        outcome = anyvsl_init.calc_displ(params=params)
-        self.result_label_displ = (str(params['displ_momc']) + '\n' +
-                                   str(params['tpc']) + '\n' +
-                                   str(params['lcf']) + '\n' +
-                                   str(outcome[0]) + '\n' +
-                                    str(params['mtc']) + '\n' +
-                                    str(params['mtc_plus']) + '; ' + str(params['mtc_minus']) + '\n' +
-                                   str(outcome[1]) + '\n' +
-                                   str(outcome[2]) + '\n' +
-                                   str(outcome[3]) + '\n' +
-                                   str(outcome[4]) + '\n' + '\n' +
-                                   str(outcome[5]))
+        self.result_displ = anyvsl_init.calc_displ(params=params)
+
+        self.result_label_displ = (str(self.result_displ[0]) + '\n' +
+                                    str(self.result_displ[1]) + '\n' +
+                                    str(self.result_displ[2]) + '\n' +
+                                    str(self.result_displ[3]) + '\n' +
+                                    str(self.result_displ[4]) + '\n' +
+                                    str(self.result_displ[5]) + '; ' + str(self.result_displ[6]) + '\n' +
+                                    str(self.result_displ[7]) + '\n' +
+                                    str(self.result_displ[8]) + '\n' +
+                                    str(self.result_displ[9]) + '\n' +
+                                    str(self.result_displ[10]) + '\n' + '\n' +
+                                    str(self.result_displ[11]))
 
         self.ui.result_anyvsl.setText(str(self.result_label_momc + self.result_label_displ))
         self.ui.countBtn_displ.setDisabled(True)
 
-    # def validate_forms(self, forms, draft_lines, additional_params_first) -> (list, list, float):
     def validate_forms(self, *args) -> (list, list, float):
         """Функция валидации введенных пользователем данных"""
 
@@ -206,14 +203,6 @@ class MainWindowEng(QWidget):
                                            + "\n" + "Applicable density values only: 0.1 - 2"
                                            + "\n" + "Applicable additional parameters only: 0.1 - 99"
                                            + "\n", QMessageBox.Ok)
-                return
-
-            # проверка названия судна
-            # TO-DO: move to export func
-            if len(self.ui.ships_name.text()) == 0:
-                QMessageBox.warning(self, 'Message',
-                                           "Vessel's name is empty!", QMessageBox.Ok)
-
                 return
 
             if max(draft_lines) > 99:

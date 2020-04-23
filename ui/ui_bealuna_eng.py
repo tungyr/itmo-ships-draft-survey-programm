@@ -322,6 +322,24 @@ class Ui_Form(object):
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
+        Form.setTabOrder(self.F_ps_line, self.F_ss_line)
+        Form.setTabOrder(self.F_ss_line, self.M_ps_line)
+        Form.setTabOrder(self.M_ps_line, self.M_ss_line)
+        Form.setTabOrder(self.M_ss_line, self.A_ps_line)
+        Form.setTabOrder(self.A_ps_line, self.A_ss_line)
+        Form.setTabOrder(self.A_ss_line, self.ballast_f)
+        Form.setTabOrder(self.ballast_f, self.fw_f)
+        Form.setTabOrder(self.fw_f, self.hfo_f)
+        Form.setTabOrder(self.hfo_f, self.mgo_f)
+        Form.setTabOrder(self.mgo_f, self.lo_f)
+        Form.setTabOrder(self.lo_f, self.slops_f)
+        Form.setTabOrder(self.slops_f, self.sludge_f)
+        Form.setTabOrder(self.sludge_f, self.other_f)
+        Form.setTabOrder(self.other_f, self.dens_f)
+        Form.setTabOrder(self.dens_f, self.countBtn)
+        Form.setTabOrder(self.countBtn, self.main_menu)
+        Form.setTabOrder(self.main_menu, self.clear)
+        Form.setTabOrder(self.clear, self.export_2)
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate

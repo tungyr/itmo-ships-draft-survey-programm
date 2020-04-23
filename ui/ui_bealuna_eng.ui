@@ -646,6 +646,27 @@ Displacement corrected, mt:</string>
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>F_ps_line</tabstop>
+  <tabstop>F_ss_line</tabstop>
+  <tabstop>M_ps_line</tabstop>
+  <tabstop>M_ss_line</tabstop>
+  <tabstop>A_ps_line</tabstop>
+  <tabstop>A_ss_line</tabstop>
+  <tabstop>ballast_f</tabstop>
+  <tabstop>fw_f</tabstop>
+  <tabstop>hfo_f</tabstop>
+  <tabstop>mgo_f</tabstop>
+  <tabstop>lo_f</tabstop>
+  <tabstop>slops_f</tabstop>
+  <tabstop>sludge_f</tabstop>
+  <tabstop>other_f</tabstop>
+  <tabstop>dens_f</tabstop>
+  <tabstop>countBtn</tabstop>
+  <tabstop>main_menu</tabstop>
+  <tabstop>clear</tabstop>
+  <tabstop>export_2</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

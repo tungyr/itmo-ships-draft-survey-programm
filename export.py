@@ -1,4 +1,5 @@
 import sys
+from draft_survey.widgets import anyvsl_eng
 from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog, QMessageBox
 from PyQt5.QtGui import QIcon
 from openpyxl import Workbook
@@ -47,23 +48,33 @@ class App(QWidget):
         self.data = data
         self.filename = ''
         self.vessel_name = vessel_name
+
+
+        # проверка названия судна
+        if len(self.vessel_name) == 0:
+            QMessageBox.warning(self, 'Message',
+                                "Vessel's name is empty!", QMessageBox.Ok)
+            return
+
         self.initUI()
 
     def initUI(self):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
 
+
         # self.openFileNameDialog()
         # self.openFileNamesDialog()
         self.saveFileDialog()
 
     def saveFileDialog(self):
+
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         time_stamp = str(datetime.today())
         time_stamp = f'{time_stamp[:13]}-{time_stamp[14:16]}'
         self.filename, _ = QFileDialog.getSaveFileName(self, "Save File", f"{time_stamp} - "
-                                                        f"{self.vessel_name} draft calculation" + ".xlsx",
+                                                        f"mv {self.vessel_name} draft calculation" + ".xlsx",
                                                   "Excel Files (*.xlsx);;All Files (*)", options=options)
 
         if self.filename != "":

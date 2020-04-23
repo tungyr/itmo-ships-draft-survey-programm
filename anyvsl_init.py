@@ -5,44 +5,21 @@ import sys
 
 def calc_momc(params):
 
-    print('mid_ps: ', params['mid_ps'])
-    print('mid_ss: ', params['mid_ss'])
-    print('aft_ps: ', params['aft_ps'])
-    print('aft_ss: ', params['aft_ss'])
-
     F_mean = round((params['fwd_ps'] + params['fwd_ss']) / 2, 3)
     M_mean = round((params['mid_ps'] + params['mid_ss']) / 2, 3)
     A_mean = round((params['aft_ps'] + params['aft_ss']) / 2, 3)
 
-    print('F_mean: ', F_mean)
-    print('M_mean: ', M_mean)
-    print('A_mean: ', A_mean)
-
-    print('a_delta: ', params['aft_delta'], type(params['aft_delta']))
-
     app_trim = round((A_mean - F_mean), 3)
-
-    print('app_trim: ', app_trim)
 
     dF = round(app_trim * params['fwd_delta'] / params['lbp'], 3)
     dM = round(app_trim * params['mid_delta'] / params['lbp'], 3)
     dA = round(app_trim * params['aft_delta'] / params['lbp'], 3)
 
-    print('dF: ', dF)
-    print('dM: ', dM)
-    print('dA: ', dA)
-
     Fc = round(F_mean + dF, 3)
     Mc = round(M_mean + dM, 3)
     Ac = round(A_mean + dA, 3)
 
-    print('Fc: ', Fc)
-    print('Mc: ', Mc)
-    print('Ac: ', Ac)
-
     true_trim = round(Ac - Fc, 3)
-
-    print('true_trim: ', true_trim)
 
     defl = (abs((Mc - (Fc + Ac) / 2)) * 100)  # hog / sag ???????????
     print('defl: ', defl)
@@ -54,7 +31,9 @@ def calc_momc(params):
 
     MOMC = round((Fc + 6 * Mc + Ac) / 8, 3)
 
-    result = (F_mean, M_mean, A_mean, app_trim, dF,
+    # вычисленные результаты плюс пробрасываем значения из словаря params обратно чтобы использовать
+    # их все вмесе в экспорте
+    result = (F_mean, M_mean, A_mean, params['fwd_delta'], params['mid_delta'], params['aft_delta'],  app_trim, dF,
                dM, dA, Fc, Mc, Ac, true_trim, defl_mean, MOMC)
 
     return result
@@ -103,8 +82,9 @@ def calc_displ(params):
         constant == 0
     else:
         constant = round(D_corr - params['light_ship'] - total, 3)
-
-    result = (FTC, dM_dZ, STC, D_trim, constant, D_corr)
+    # вычисленные результаты плюс пробрасываем значения из словаря params обратно чтобы использовать
+    # их все вмесе в экспорте
+    result = (params['displ_momc'], params['tpc'], params['lcf'], FTC, params['mtc'], params['mtc_plus'], params['mtc_minus'], dM_dZ, STC, D_trim, constant, D_corr)
 
     return result
 

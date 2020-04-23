@@ -9,7 +9,6 @@ class TestStorage(unittest.TestCase):
         i = 0
         for value in a_mean:
             result = storage.aft_dist_data(value)
-            print(value, '-', result)
             self.assertEqual(round(result, 2), correct_values[i])
             i += 1
 
