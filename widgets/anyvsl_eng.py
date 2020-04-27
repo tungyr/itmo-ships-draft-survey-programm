@@ -8,7 +8,7 @@ from functools import partial
 from PyQt5.QtCore import QRegExp
 from PyQt5.QtGui import QRegExpValidator
 
-from project import anyvsl_init, export, intro
+from draft_survey import anyvsl_init, export, intro
 
 from ui.ui_anyvsl_eng import Ui_Form
 

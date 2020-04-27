@@ -12,7 +12,7 @@ from functools import partial
 from PyQt5.QtCore import QRegExp
 from PyQt5.QtGui import QRegExpValidator
 
-from project import anyvsl_init
+from draft_survey import anyvsl_init
 
 
 from ui.ui_anyvsl_rus import Ui_Form
