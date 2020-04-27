@@ -1,159 +1,133 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import sys
-from PyQt5 import Qt
-from PyQt5 import QtCore, QtWidgets, QtGui
+from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import *
-# QPushButton, QWidget, QLabel, qApp, QApplication, QMainWindow, QFormLayout, QLineEdit, QFrame, QRadioButton
-from PyQt5.QtCore import *
-from PyQt5.QtGui import QIcon, QPixmap
 from functools import partial
 
 from PyQt5.QtCore import QRegExp
 from PyQt5.QtGui import QRegExpValidator
 
-from draft_survey import anyvsl_init
+from draft_survey import anyvsl_init, export, intro
+
+from draft_survey.ui.ui_anyvsl_rus import Ui_Form
 
 
-from ui.ui_anyvsl_rus import Ui_Form
-
-
-class mainwindow_rus(QWidget):
+class MainWindowRus(QWidget):
     def __init__(self, parent=None):
-        super(mainwindow_rus, self).__init__(parent)
+        super(MainWindowRus, self).__init__(parent)
 
         self.ui = Ui_Form()
         self.ui.setupUi(self)
+        self.result_momc = ()
+        self.result_displ = ()
 
-        reg_draft = QRegExp("\d{0,2}[.]\d{1,3}")
-        input_validator = QRegExpValidator(reg_draft, self.ui.F_ps_line)
-        self.ui.F_ps_line.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_draft, self.ui.F_ss_line)
-        self.ui.F_ss_line.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_draft, self.ui.M_ps_line)
-        self.ui.M_ps_line.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_draft, self.ui.M_ss_line)
-        self.ui.M_ss_line.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_draft, self.ui.A_ps_line)
-        self.ui.A_ps_line.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_draft, self.ui.A_ss_line)
-        self.ui.A_ss_line.setValidator(input_validator)
+        self.draft_lines = (self.ui.F_ps_line, self.ui.F_ss_line, self.ui.M_ps_line, self.ui.M_ss_line,
+                            self.ui.A_ps_line, self.ui.A_ss_line)
 
-        reg_dens = QRegExp("([0-2])([.])\d{1,3}")
-        input_validator = QRegExpValidator(reg_dens, self.ui.dens_f)
-        self.ui.dens_f.setValidator(input_validator)
+        self.additional_params_first = (self.ui.dens_f, self.ui.LBP_f, self.ui.fwd_delta_f, self.ui.mid_delta_f,
+                                        self.ui.aft_delta_f)
 
-        reg_addparam = QRegExp("([-])?([0-9])([.])\d{1,3}")
-        input_validator = QRegExpValidator(reg_addparam, self.ui.fwd_delta_f)
-        self.ui.fwd_delta_f.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_addparam, self.ui.mid_delta_f)
-        self.ui.mid_delta_f.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_addparam, self.ui.aft_delta_f)
-        self.ui.aft_delta_f.setValidator(input_validator)
+        self.additional_params_second = (self.ui.displ_momc_f, self.ui.TPC_f, self.ui.LCF_f, self.ui.MTC_f,
+                                         self.ui.MTC_plus_f, self.ui.MTC_minus_f, self.ui.light_ship_f)
 
-        reg_addparam_lower = QRegExp("\d{1,5}[.]\d{1,5}")
-        input_validator = QRegExpValidator(reg_addparam_lower, self.ui.LBP_f)
-        self.ui.LBP_f.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_addparam_lower, self.ui.displ_momc_f)
-        self.ui.displ_momc_f.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_addparam_lower, self.ui.TPC_f)
-        self.ui.TPC_f.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_addparam_lower, self.ui.LCF_f)
-        self.ui.LCF_f.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_addparam_lower, self.ui.MTC_f)
-        self.ui.MTC_f.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_addparam_lower, self.ui.MTC_plus_f)
-        self.ui.MTC_plus_f.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_addparam_lower, self.ui.MTC_minus_f)
-        self.ui.MTC_minus_f.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_addparam_lower, self.ui.light_ship_f)
-        self.ui.light_ship_f.setValidator(input_validator)
+        self.stores_lines = (self.ui.ballast_f, self.ui.fw_f, self.ui.hfo_f, self.ui.mgo_f, self.ui.lo_f,
+                             self.ui.slops_f, self.ui.sludge_f, self.ui.other_f)
 
-        reg_cons = QRegExp("\d{1,4}[.]\d{1,3}")
-        input_validator = QRegExpValidator(reg_cons, self.ui.ballast_f)
-        self.ui.ballast_f.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_cons, self.ui.fw_f)
-        self.ui.fw_f.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_cons, self.ui.hfo_f)
-        self.ui.hfo_f.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_cons, self.ui.mgo_f)
-        self.ui.mgo_f.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_cons, self.ui.lo_f)
-        self.ui.lo_f.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_cons, self.ui.slops_f)
-        self.ui.slops_f.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_cons, self.ui.sludge_f)
-        self.ui.sludge_f.setValidator(input_validator)
-        input_validator = QRegExpValidator(reg_cons, self.ui.other_f)
-        self.ui.other_f.setValidator(input_validator)
+        # установка значений по умолчанию для полей
+        for draft_line in self.draft_lines:
+            draft_line.setText('2.0')
+
+        self.ui.ships_name.setText('unnamed')
+        self.ui.dens_f.setText('1.025')
+        self.ui.LBP_f.setText('145')
+        self.ui.fwd_delta_f.setText('2.0')
+        self.ui.mid_delta_f.setText('2.0')
+        self.ui.aft_delta_f.setText('2.0')
+
+        self.ui.displ_momc_f.setText('3000')
+        self.ui.TPC_f.setText('16')
+        self.ui.LCF_f.setText('65')
+        self.ui.MTC_f.setText('107')
+        self.ui.MTC_plus_f.setText('110')
+        self.ui.MTC_minus_f.setText('103')
+        self.ui.light_ship_f.setText('2500')
+
+        for store_line in self.stores_lines:
+            store_line.setText('100')
+
+        # всплывающие подсказки для полей осадок
+        for draft_line in self.draft_lines:
+            draft_line.setToolTip('Applicable draft values only: 2 - 7.8')
 
         self.ui.countBtn_momc.clicked.connect(self.calculate_momc)
+        # # обработка нажатия кнопки экспортирования данных в отчет
+        self.ui.export_2.clicked.connect(lambda: export.App(self.result_momc + self.result_displ,
+                                                            vessel_name=self.ui.ships_name.text()))
+        # обработка нажатия кнопки очистки данных полей
+        self.ui.clear.clicked.connect(lambda: self.clear_forms())
+        # обработка нажатия кнопки возвращения в главное меню
+        self.ui.main_menu.clicked.connect(lambda: intro_window())
+
+        def intro_window() -> None:
+            """Функция запуска приветственного окна"""
+            self.main_win = intro.IntroWindow()
+            self.main_win.show()
+            self.close()
+
+    def clear_forms(self) -> None:
+        """Функция очистки полей от значений"""
+
+        self.ui.ships_name.setText('')
+        self.ui.result_anyvsl.setText('')
+
+        for draft_line in self.draft_lines:
+            draft_line.setText('')
+
+        for store_line in self.stores_lines:
+            store_line.setText('')
+
+        for line in self.additional_params_first:
+            line.setText('')
+
+        for line in self.additional_params_second:
+            line.setText('')
 
     def calculate_momc(self):
-        try:
-                min(float(x) for x in (self.ui.F_ps_line.text(),
-                                       self.ui.F_ss_line.text(),
-                                       self.ui.M_ps_line.text(),
-                                       self.ui.M_ss_line.text(),
-                                       self.ui.A_ps_line.text(),
-                                       self.ui.A_ss_line.text(),
-                                       self.ui.LBP_f.text(),
-                                       self.ui.fwd_delta_f.text(),
-                                       self.ui.mid_delta_f.text(),
-                                       self.ui.aft_delta_f.text()))
 
-        except ValueError:
-                warn = QMessageBox.warning(self, 'Message',
-                                              "Applicable draft values only: 0.1 - 99"
-                                              + "\n" +
-                                              "Applicable density values only: 0.1 - 2"
-                                              + "\n" +
-                                              "Applicable additional parameters only: 0.1 - 99"
-                                              + "\n", QMessageBox.Ok)
-                return
+        validates_result = self.validate_forms('momc', self.draft_lines, self.additional_params_first)
 
-        fwd_ps = float(self.ui.F_ps_line.text())
-        fwd_ss = float(self.ui.F_ss_line.text())
-        mid_ps = float(self.ui.M_ps_line.text())
-        mid_ss = float(self.ui.M_ss_line.text())
-        aft_ps = float(self.ui.A_ps_line.text())
-        aft_ss = float(self.ui.A_ss_line.text())
-        lbp = float(self.ui.LBP_f.text())
-        fwd_delta = float(self.ui.fwd_delta_f.text())
-        mid_delta = float(self.ui.mid_delta_f.text())
-        aft_delta = float(self.ui.aft_delta_f.text())
-
-        if min(fwd_ps, fwd_ss, mid_ps, mid_ss, aft_ps, aft_ss, lbp, fwd_delta,
-               mid_delta, aft_delta) == 0:
-            warn = QMessageBox.warning(self, 'Message',
-                                         "Applicable draft values only: 0.1 - 99"
-                                         + "\n" +
-                                         "Applicable density values only: 0.1 - 2"
-                                         + "\n" +
-                                         "Applicable additional parameters only: 0.1 - 99"
-                                         + "\n", QMessageBox.Ok)
+        if validates_result is None:
             return
 
-        outcome = anyvsl_init.calc_momc(fwd_ps, fwd_ss, mid_ps, mid_ss, aft_ps,
-                                        aft_ss, lbp, fwd_delta, mid_delta,
-                                        aft_delta)
+        params_labels = ['fwd_ps', 'fwd_ss', 'mid_ps', 'mid_ss', 'aft_ps', 'aft_ss', 'dens', 'lbp', 'fwd_delta',
+                         'mid_delta', 'aft_delta']
 
-        show_label = (str(outcome[0]) + '; ' + str(outcome[1]) + '; ' +
-                      str(outcome[2]) + '\n' + str(outcome[3]) + '\n' +
-                      str(outcome[4]) + '\n' + str(outcome[5]) + '\n' +
-                      str(outcome[6]) + '\n' + str(outcome[7]) + '\n' +
-                      str(outcome[8]) + '\n' + str(outcome[9]) + '\n' +
-                      str(outcome[10]) + '\n' + str(outcome[11]) + '\n' +
-                      str(outcome[12]))
+        params_values = validates_result[0] + validates_result[1]
+        params = dict(zip(params_labels, params_values))
 
-        true_trim = outcome[10]
-        print('true_trim', true_trim, type(true_trim))
-        print('lbp', lbp, type(lbp))
+        # вызов функции расчета с передачей параметров
+        self.result_momc = anyvsl_init.calc_momc(params=params)
 
-        self.ui.result.setText(str(show_label))
+        self.result_label_momc = (str(self.result_momc[0]) + '; ' + str(self.result_momc[1]) + '; '
+                                + str(self.result_momc[2]) + '\n' +
+                                str(self.result_momc[3]) + '\n' +
+                                str(self.result_momc[4]) + '\n' +
+                                str(self.result_momc[5]) + '\n' +
+                                str(self.result_momc[6]) + '\n' +
+                                str(self.result_momc[7]) + '\n' +
+                                str(self.result_momc[8]) + '\n' +
+                                str(self.result_momc[9]) + '\n' +
+                                str(self.result_momc[10]) + '\n' +
+                                str(self.result_momc[11]) + '\n' +
+                                str(self.result_momc[12]) + '\n' +
+                                str(self.result_momc[13]) + '\n' +
+                                str(self.result_momc[14]) + '\n' +
+                                str(self.result_momc[15]) + '\n')
+
+        self.ui.result_anyvsl.setText(str(self.result_label_momc))
 
         self.ui.countBtn_displ.setEnabled(True)
-        self.ui.dens_f.setEnabled(True)
         self.ui.displ_momc_f.setEnabled(True)
         self.ui.TPC_f.setEnabled(True)
         self.ui.LCF_f.setEnabled(True)
@@ -171,86 +145,98 @@ class mainwindow_rus(QWidget):
         self.ui.slops_f.setEnabled(True)
         self.ui.sludge_f.setEnabled(True)
         self.ui.other_f.setEnabled(True)
+        self.ui.export_2.setEnabled(True)
 
-        # self.ui.countBtn_displ.clicked.connect(self.calculate_displ)
-        self.ui.countBtn_displ.clicked.connect(partial(self.calculate_displ, lbp, true_trim))
+        QMessageBox.information(self, 'Message',
+                            "Please fill up next fields using calculated data and your hydrostatic tables"
+                            + "\n", QMessageBox.Ok)
 
-    # def keyPressEvent(self, event):
-    #     if event.key() == Qt.Key_Return:
-    #         partial(self.calculate_displ, lbp, true_trim))
+        self.ui.countBtn_displ.clicked.connect(partial(self.calculate_displ, params['lbp'], params['dens'],
+                                                       true_trim=self.result_momc[13]))
 
 
-    def calculate_displ(self, lbp, true_trim):
+    def calculate_displ(self, lbp, dens, true_trim):
+
+        validates_result = self.validate_forms(self.additional_params_second, self.stores_lines)
+
+        if validates_result is None:
+            return
+
+        params_labels = ['lbp', 'true_trim', 'dens', 'displ_momc', 'tpc', 'lcf', 'mtc', 'mtc_plus',
+                         'mtc_minus', 'light_ship', 'ballast', 'fw', 'hfo', 'mgo', 'lo', 'slops', 'sludge', 'other']
+
+        params_values = [lbp, true_trim, dens] + validates_result[0] + validates_result[1]
+        params = dict(zip(params_labels, params_values))
+
+        # вызов функции расчета с передачей параметров
+        self.result_displ = anyvsl_init.calc_displ(params=params)
+
+        self.result_label_displ = (str(self.result_displ[0]) + '\n' +
+                                    str(self.result_displ[1]) + '\n' +
+                                    str(self.result_displ[2]) + '\n' +
+                                    str(self.result_displ[3]) + '\n' +
+                                    str(self.result_displ[4]) + '\n' +
+                                    str(self.result_displ[5]) + '; ' + str(self.result_displ[6]) + '\n' +
+                                    str(self.result_displ[7]) + '\n' +
+                                    str(self.result_displ[8]) + '\n' +
+                                    str(self.result_displ[9]) + '\n' +
+                                    str(self.result_displ[10]) + '\n' + '\n' +
+                                    str(self.result_displ[11]))
+
+        self.ui.result_anyvsl.setText(str(self.result_label_momc + self.result_label_displ))
+        self.ui.countBtn_displ.setDisabled(True)
+
+    def validate_forms(self, *args) -> (list, list, float):
+        """Функция валидации введенных пользователем данных"""
+
+        # проверка значений для первой части вычислений
+        if args[0] == "momc":
+
+            # проверка валидности полей осадок и доп. параметров
             try:
-                min(float(x) for x in (self.ui.dens_f.text(),
-                                       self.ui.displ_momc_f.text(),
-                                               self.ui.TPC_f.text(),
-                                               self.ui.LCF_f.text(),
-                                               self.ui.MTC_f.text(),
-                                               self.ui.MTC_plus_f.text(),
-                                               self.ui.MTC_minus_f.text(),
-                                               self.ui.light_ship_f.text(),
-                                               self.ui.LBP_f.text(),
-                                               self.ui.fwd_delta_f.text(),
-                                               self.ui.mid_delta_f.text(),
-                                               self.ui.aft_delta_f.text()))
+                draft_lines = [float(draft_line.text()) for draft_line in args[1]]
+                additional_params_first = [float(param.text()) for param in args[2]]
 
             except ValueError:
-                warn = QMessageBox.warning(self, 'Message',
-                                              "Applicable draft values only: 0 - 99"
-                                              + "\n" +
-                                              "Applicable density values only: 0 - 2"
-                                              + "\n" +
-                                              "Applicable additional parameters only: 0 - 99"
-                                              + "\n", QMessageBox.Ok)
+                QMessageBox.warning(self, 'Message',
+                                           "Applicable draft values only: 0.1 - 99"
+                                           + "\n" + "Applicable density values only: 0.1 - 2"
+                                           + "\n" + "Applicable additional parameters only: 0.1 - 99"
+                                           + "\n", QMessageBox.Ok)
+                return
 
-            cons_raw = [self.ui.ballast_f.text(),
-                    self.ui.fw_f.text(),
-                    self.ui.hfo_f.text(),
-                    self.ui.mgo_f.text(),
-                    self.ui.lo_f.text(),
-                    self.ui.slops_f.text(),
-                    self.ui.sludge_f.text(),
-                    self.ui.other_f.text()]
+            if max(draft_lines) > 99:
+                QMessageBox.warning(self, 'Message',
+                                           "Applicable draft values only: 2 - 7.8"
+                                           + "\n" + "Applicable density values only: 0.1 - 2"
+                                           + "\n", QMessageBox.Ok)
 
-            cons = []
-            for i in cons_raw:
-                print(i)
-                if i == '':
-                    i = 0
-                    cons.append(i)
-                else:
-                    cons.append(float(i))
-            print('cons: ', cons)
+                return
 
-            dens = float(self.ui.dens_f.text())
-            displ_momc = float(self.ui.displ_momc_f.text())
-            tpc = float(self.ui.TPC_f.text())
-            lcf = float(self.ui.LCF_f.text())
-            mtc = float(self.ui.MTC_f.text())
-            mtc_plus = float(self.ui.MTC_plus_f.text())
-            mtc_minus = float(self.ui.MTC_minus_f.text())
-            light_ship = float(self.ui.light_ship_f.text())
-            ballast = cons[0]
-            fw = cons[1]
-            hfo = cons[2]
-            mgo = cons[3]
-            lo = cons[4]
-            slops = cons[5]
-            sludge = cons[6]
-            other = cons[7]
-            outcome = anyvsl_init.calc_displ(lbp, true_trim, dens, displ_momc, tpc, lcf, mtc, mtc_plus,
-                                mtc_minus, light_ship, ballast, fw, hfo,
-                                mgo, lo, slops, sludge, other)
-            show_label = (str(outcome[0]) + '\n' + str(outcome[1]) + '\n' + str(outcome[2]) + '\n' + '\n' + str(outcome[3]) + '\n' +
-                  str(outcome[4]) + '\n' + '\n' + str(outcome[5]))
+            return draft_lines, additional_params_first
 
-            self.ui.result_anyvsl.setText(str(show_label))
+        # проверка значений для второй части вычислений
+        else:
+            try:
+                additional_params_second = [float(param.text()) for param in args[0]]
+            except ValueError:
+                QMessageBox.warning(self, 'Message',
+                                           "Applicable additional parameters only: 0 - 99"
+                                           + "\n", QMessageBox.Ok)
+                return
 
+            try:
+                stores_lines = [float(store_line.text()) for store_line in args[1]]
+            except ValueError:
+                QMessageBox.warning(self, 'Message',
+                                           "Stores not filled up!" + "\n", QMessageBox.Ok)
+                return
+
+            return additional_params_second, stores_lines
 
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    mainWin = mainwindow_eng()
+    mainWin = MainWindowRus()
     mainWin.show()
     sys.exit(app.exec_())
