@@ -7,8 +7,8 @@ from PyQt5.QtWidgets import QWidget
 import sys
 
 
-from draft_survey.ui.ui_intro import Ui_Draft_survey
-from draft_survey.widgets import anyvsl_eng, anyvsl_rus, bealuna_eng, bealuna_rus
+from project.ui.ui_intro import Ui_Draft_survey
+from project.widgets import anyvsl_eng, anyvsl_rus, bealuna_eng, bealuna_rus
 
 
 class IntroWindow(QWidget):

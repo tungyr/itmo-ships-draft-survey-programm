@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys
 
-from draft_survey import storage
+from project import storage
 # функция связи с БД
 get_connection = lambda: storage.connect('hydrostatic.sqlite')
 

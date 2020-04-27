@@ -1,5 +1,5 @@
 import sys
-from draft_survey.widgets import anyvsl_eng
+from project.widgets import anyvsl_eng
 from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog, QMessageBox
 from PyQt5.QtGui import QIcon
 from openpyxl import Workbook
