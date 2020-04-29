@@ -51,13 +51,7 @@ def calc_momc(params):
 
 def calc_displ(params):
 
-    print('D_momc: ', params['displ_momc'])
-    print('TPC: ', params['tpc'])
-    print('LCF: ', params['lcf'])
-
     FTC = round((abs(params['true_trim'] * params['tpc'] * (params['lbp'] / 2 - params['lcf']) / params['lbp'] * 100)), 3)
-
-    print('FTC: ', FTC)
 
     if params['lbp']/2 < params['lcf'] and ['true_trim'] > 0:
         FTC = FTC * -1
@@ -68,30 +62,15 @@ def calc_displ(params):
 
     dM_dZ = round(params['mtc_plus'] - params['mtc_minus'], 3)
 
-    print('dM_dZ: ', dM_dZ)
-
     STC = round(((params['true_trim'] * params['true_trim'] * dM_dZ * 50.0) / params['lbp']), 3)
-
-    print('STC: ', STC)
 
     D_trim = round(params['displ_momc'] + FTC + STC, 3)
 
-    print('D_trim: ', D_trim)
-
     D_corr = round(D_trim * params['dens'] / 1.025, 3)
-
-    print('D_corr: ', D_corr)
 
     total = params['ballast'] + params['fw'] + params['hfo'] + params['mgo'] + params['lo'] + params['slops'] + params['sludge'] + params['other']
 
-    print('total: ', total)
-
-    constant = 0
-
-    if D_corr == 0:
-        constant == 0
-    else:
-        constant = round(D_corr - params['light_ship'] - total, 3)
+    constant = round(D_corr - params['light_ship'] - total, 3)
     # вычисленные результаты плюс пробрасываем значения из словаря params обратно чтобы использовать
     # их все вмесе в экспорте
     result = (params['displ_momc'], params['tpc'], params['lcf'], FTC, params['mtc'], params['mtc_plus'], params['mtc_minus'], dM_dZ, STC, D_trim, constant, D_corr)

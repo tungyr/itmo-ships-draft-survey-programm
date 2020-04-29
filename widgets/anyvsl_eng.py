@@ -21,9 +21,7 @@ class MainWindowEng(QWidget):
         self.ui.setupUi(self)
         self.result_momc = ()
         self.result_displ = ()
-        self.lbp = 0
-        self.density = 0
-        self.true_trim = 0
+        self.params = {}
 
         self.draft_lines = (self.ui.F_ps_line, self.ui.F_ss_line, self.ui.M_ps_line, self.ui.M_ss_line,
                             self.ui.A_ps_line, self.ui.A_ss_line)
@@ -63,12 +61,18 @@ class MainWindowEng(QWidget):
         for draft_line in self.draft_lines:
             draft_line.setToolTip('Applicable draft values only: 2 - 7.8')
 
+        # обработка нажатия кнопки расчета momc
         self.ui.countBtn_momc.clicked.connect(self.calculate_momc)
-        # # обработка нажатия кнопки экспортирования данных в отчет
+
+        # обработка нажатия кнопки расчета водоизмещения
+        self.ui.countBtn_displ.clicked.connect(partial(self.calculate_displ))
+
+        # обработка нажатия кнопки экспортирования данных в отчет
         self.ui.export_2.clicked.connect(lambda: export.App(self.result_momc + self.result_displ,
                                                             vessel_name=self.ui.ships_name.text()))
         # обработка нажатия кнопки очистки данных полей
         self.ui.clear.clicked.connect(lambda: self.clear_forms())
+
         # обработка нажатия кнопки возвращения в главное меню
         self.ui.main_menu.clicked.connect(lambda: intro_window())
 
@@ -107,10 +111,12 @@ class MainWindowEng(QWidget):
                          'mid_delta', 'aft_delta']
 
         params_values = validates_result[0] + validates_result[1]
-        params = dict(zip(params_labels, params_values))
+
+        # словарь для хранения принятых от пользователя значений, по которым будет расчет в anyvsl_init.calc_momc
+        self.params = dict(zip(params_labels, params_values))
 
         # вызов функции расчета с передачей параметров
-        self.result_momc = anyvsl_init.calc_momc(params=params)
+        self.result_momc = anyvsl_init.calc_momc(params=self.params)
 
         self.result_label_momc = (str(self.result_momc[0]) + '; ' + str(self.result_momc[1]) + '; '
                                 + str(self.result_momc[2]) + '\n' +
@@ -128,8 +134,10 @@ class MainWindowEng(QWidget):
                                 str(self.result_momc[14]) + '\n' +
                                 str(self.result_momc[15]) + '\n')
 
+        # вывод первоначального результата в программе
         self.ui.result_anyvsl.setText(str(self.result_label_momc))
 
+        # активирование полей для ввода пользователем следующих вводных данных для расчета водоизмещения
         self.ui.countBtn_displ.setEnabled(True)
         self.ui.displ_momc_f.setEnabled(True)
         self.ui.TPC_f.setEnabled(True)
@@ -155,19 +163,19 @@ class MainWindowEng(QWidget):
             QMessageBox.information(self, 'Message', "Please fill up next fields using calculated data and your "
                                                      "hydrostatic tables" + "\n", QMessageBox.Ok)
 
-        #TO-DO: too many warnings
-        self.ui.countBtn_displ.clicked.connect(partial(self.calculate_displ, params['lbp'], params['dens'],
-                                                       true_trim=self.result_momc[13]))
-
         return
 
 
-    def calculate_displ(self, lbp, dens, true_trim):
+    def calculate_displ(self):
 
         validates_result = self.validate_forms(self.additional_params_second, self.stores_lines)
 
         if validates_result is None:
             return
+
+        lbp = self.params['lbp']
+        dens = self.params['dens']
+        true_trim = self.result_momc[13]
 
         params_labels = ['lbp', 'true_trim', 'dens', 'displ_momc', 'tpc', 'lcf', 'mtc', 'mtc_plus',
                          'mtc_minus', 'light_ship', 'ballast', 'fw', 'hfo', 'mgo', 'lo', 'slops', 'sludge', 'other']
