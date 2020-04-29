@@ -60,7 +60,7 @@ class MainWindowRus(QWidget):
         for draft_line in self.draft_lines:
             draft_line.setToolTip('Applicable draft values only: 2 - 7.8')
 
-        self.ui.countBtn_momc.clicked.connect(self.calculate_momc)
+        self.ui.countBtn_momc.clicked.connect(self.calculate_momc_rus)
         # # обработка нажатия кнопки экспортирования данных в отчет
         self.ui.export_2.clicked.connect(lambda: export.App(self.result_momc + self.result_displ,
                                                             vessel_name=self.ui.ships_name.text()))
@@ -93,7 +93,7 @@ class MainWindowRus(QWidget):
         for line in self.additional_params_second:
             line.setText('')
 
-    def calculate_momc(self):
+    def calculate_momc_rus(self):
 
         validates_result = self.validate_forms('momc', self.draft_lines, self.additional_params_first)
 
@@ -147,9 +147,9 @@ class MainWindowRus(QWidget):
         self.ui.other_f.setEnabled(True)
         self.ui.export_2.setEnabled(True)
 
-        QMessageBox.information(self, 'Message',
-                            "Please fill up next fields using calculated data and your hydrostatic tables"
-                            + "\n", QMessageBox.Ok)
+        if self.ui.displ_momc_f.text() == '':
+            QMessageBox.information(self, 'Message', "Заполните оставшиеся поля с помощью гидростатических таблиц"
+                                    + "\n", QMessageBox.Ok)
 
         self.ui.countBtn_displ.clicked.connect(partial(self.calculate_displ, params['lbp'], params['dens'],
                                                        true_trim=self.result_momc[13]))
@@ -199,16 +199,16 @@ class MainWindowRus(QWidget):
 
             except ValueError:
                 QMessageBox.warning(self, 'Message',
-                                           "Applicable draft values only: 0.1 - 99"
-                                           + "\n" + "Applicable density values only: 0.1 - 2"
-                                           + "\n" + "Applicable additional parameters only: 0.1 - 99"
+                                           "Допустимые значения осадок: 0.1 - 99"
+                                           + "\n" + "Допустимое значение плотности воды: 0.1 - 2"
+                                           + "\n" + "Допустимые значения доп. параметров: 0.1 - 99"
                                            + "\n", QMessageBox.Ok)
                 return
 
             if max(draft_lines) > 99:
                 QMessageBox.warning(self, 'Message',
-                                           "Applicable draft values only: 2 - 7.8"
-                                           + "\n" + "Applicable density values only: 0.1 - 2"
+                                           "Допустимые значения осадок: 0.1 - 99"
+                                           + "\n" + "Допустимое значение плотности воды: 0.1 - 2"
                                            + "\n", QMessageBox.Ok)
 
                 return
@@ -221,7 +221,7 @@ class MainWindowRus(QWidget):
                 additional_params_second = [float(param.text()) for param in args[0]]
             except ValueError:
                 QMessageBox.warning(self, 'Message',
-                                           "Applicable additional parameters only: 0 - 99"
+                                           "Допустимые значения доп. параметров: 0.1 - 99"
                                            + "\n", QMessageBox.Ok)
                 return
 
@@ -229,7 +229,7 @@ class MainWindowRus(QWidget):
                 stores_lines = [float(store_line.text()) for store_line in args[1]]
             except ValueError:
                 QMessageBox.warning(self, 'Message',
-                                           "Stores not filled up!" + "\n", QMessageBox.Ok)
+                                           "Значения запасов не заполнены!" + "\n", QMessageBox.Ok)
                 return
 
             return additional_params_second, stores_lines

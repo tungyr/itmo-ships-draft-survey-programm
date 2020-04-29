@@ -21,6 +21,9 @@ class MainWindowEng(QWidget):
         self.ui.setupUi(self)
         self.result_momc = ()
         self.result_displ = ()
+        self.lbp = 0
+        self.density = 0
+        self.true_trim = 0
 
         self.draft_lines = (self.ui.F_ps_line, self.ui.F_ss_line, self.ui.M_ps_line, self.ui.M_ss_line,
                             self.ui.A_ps_line, self.ui.A_ss_line)
@@ -147,12 +150,16 @@ class MainWindowEng(QWidget):
         self.ui.other_f.setEnabled(True)
         self.ui.export_2.setEnabled(True)
 
-        QMessageBox.information(self, 'Message',
-                            "Please fill up next fields using calculated data and your hydrostatic tables"
-                            + "\n", QMessageBox.Ok)
+        # сообщение о необходимости заполнения доп. параметров
+        if self.ui.displ_momc_f.text() == '':
+            QMessageBox.information(self, 'Message', "Please fill up next fields using calculated data and your "
+                                                     "hydrostatic tables" + "\n", QMessageBox.Ok)
 
+        #TO-DO: too many warnings
         self.ui.countBtn_displ.clicked.connect(partial(self.calculate_displ, params['lbp'], params['dens'],
                                                        true_trim=self.result_momc[13]))
+
+        return
 
 
     def calculate_displ(self, lbp, dens, true_trim):
@@ -207,7 +214,7 @@ class MainWindowEng(QWidget):
 
             if max(draft_lines) > 99:
                 QMessageBox.warning(self, 'Message',
-                                           "Applicable draft values only: 2 - 7.8"
+                                           "Applicable draft values only: 0.1 - 99"
                                            + "\n" + "Applicable density values only: 0.1 - 2"
                                            + "\n", QMessageBox.Ok)
 

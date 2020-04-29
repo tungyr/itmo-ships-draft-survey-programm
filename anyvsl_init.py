@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import sys
+import inspect
 
 
 def calc_momc(params):
@@ -21,13 +22,22 @@ def calc_momc(params):
 
     true_trim = round(Ac - Fc, 3)
 
-    defl = (abs((Mc - (Fc + Ac) / 2)) * 100)  # hog / sag ???????????
-    print('defl: ', defl)
+    # defl = (abs((Mc - (Fc + Ac) / 2)) * 100)
+
+    # определение программы, вызвавшей расчет
+    curframe = inspect.currentframe()
+    calframe = inspect.getouterframes(curframe, 2)
+
+
+    if calframe[1][3] == "calculate_momc":
+        defl_label = ('Sagging', 'Hogging')
+    else:
+        defl_label = ('Прогиб', 'Выгиб')
 
     if (Mc - (Fc + Ac) / 2) > 0:
-        defl_mean = "Sagging"
+        defl_mean = defl_label[0]
     else:
-        defl_mean = "Hogging"
+        defl_mean = defl_label[1]
 
     MOMC = round((Fc + 6 * Mc + Ac) / 8, 3)
 
