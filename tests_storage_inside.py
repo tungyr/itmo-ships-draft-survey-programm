@@ -1,5 +1,6 @@
-import storage
 import unittest
+
+import storage
 
 class TestStorage(unittest.TestCase):
 
