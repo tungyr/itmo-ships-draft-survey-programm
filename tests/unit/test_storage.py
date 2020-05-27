@@ -21,7 +21,7 @@ class TestInterpolation(unittest.TestCase):
     def integers(self):
         data = [[(5.5, -1.97), (5.4, -1.95)], 5.46, 1]
         result = storage.interpolation(*data)
-        print(result)
+        print("result:", result)
         self.assertEqual(result, -1.962)
 
 
