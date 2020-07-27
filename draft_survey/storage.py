@@ -8,10 +8,13 @@ SQL_SELECT_DIST_BY_AFT_DRAFT = 'SELECT * FROM AFT_DRAUGHT WHERE DRAUGHT<=?'
 SQL_SELECT_HYDROSTATIC_BY_MOMC = 'SELECT * FROM HYDROSTATIC WHERE DRAUGHT>=?'
 
 
-def connect(db_name=None):
+def connect(db_name):
     """Функция подключения к БД"""
-    if db_name is None:
-        db_name = ':memory:'
+    try:
+        conn = sqlite3.connect(db_name)
+        conn.execute(SQL_SELECT_DIST_BY_AFT_DRAFT, (2.0,))
+    except sqlite3.OperationalError:
+        return "DB is missing!"
 
     conn = sqlite3.connect(db_name)
     return conn

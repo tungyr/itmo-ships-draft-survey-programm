@@ -4,7 +4,7 @@ import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import *
 
-import __init__, export, intro
+import __init__, export, intro, storage
 from ui.ui_bealuna_rus import Ui_Form
 
 
@@ -143,6 +143,11 @@ class MainwindowRus(QWidget):
 
         if 2.0 < density_line or density_line < 0.1:
             warn = QMessageBox.warning(self, 'Message', "Допустимые значения плотности только: 0.1 - 2" +
+                                       "\n", QMessageBox.Ok)
+            return
+
+        if storage.connect('hydrostatic.sqlite') == "DB is missing!":
+            warn = QMessageBox.warning(self, 'Message', "База данных отсутствует!" +
                                        "\n", QMessageBox.Ok)
             return
 
