@@ -40,7 +40,7 @@ class IntroWindow(QWidget):
             self.close()
 
         elif self.ui_intro.rus_radiobtn.isChecked() and self.ui_intro.anyvsl_radiobtn.isChecked():
-            self.main_win = anyvsl_rus.MainWindowRus()
+            self.main_win = anyvsl_rus.mainwindow_rus()
             self.main_win.show()
             self.close()
 
