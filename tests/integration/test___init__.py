@@ -4,7 +4,7 @@ import unittest
 # import draft_survey.__init__
 # sys.path.append('draft_survey')
 print('__file__={0:<35} | __name__={1:<20} | __package__={2:<20}'.format(__file__, __name__, str(__package__)))
-from draft_survey.__init__ import aft_dist
+from draft_survey.calc import aft_dist
 
 
 
