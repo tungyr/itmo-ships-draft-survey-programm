@@ -1,0 +1,10 @@
+# files to cover by tests:
+
+4) intro?
+1) __init__
+aft_dist func
+2) anyvsl_init
+3) export
+5) storage
+6) widgets?
+7) ui?

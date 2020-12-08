@@ -9,7 +9,6 @@ get_connection = lambda: storage.connect('hydrostatic.sqlite')
 LBP = 123.175
 
 
-
 def aft_dist(a_mean) -> float:
     """Функция поиска отстояния для поправки кормовой осадки"""
 
