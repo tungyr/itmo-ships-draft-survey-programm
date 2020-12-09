@@ -18,7 +18,8 @@ def aft_dist(a_mean) -> float:
     aft_distance = round(aft_distance, 3)
     return aft_distance
 
-def calc(parameters):
+
+def calculation(parameters):
     """Основная функция расчета программы"""
 
     #  определение средних осадок
@@ -117,5 +118,5 @@ def calc(parameters):
 
 
 if __name__ == '__main__':
-    calc()
+    calculation()
     aft_dist()
