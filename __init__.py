@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import sys
@@ -122,4 +120,3 @@ def calc(parameters):
 if __name__ == '__main__':
     calc()
     aft_dist()
->>>>>>> test_anyvsl_eng
