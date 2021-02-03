@@ -10,7 +10,7 @@ from PyQt5.QtGui import QRegExpValidator
 
 from draft_survey import anyvsl_init, export, intro
 
-from ui.ui_anyvsl_eng import Ui_Form
+from draft_survey.ui.ui_anyvsl_eng import Ui_Form
 
 
 class MainWindowEng(QWidget):

@@ -4,8 +4,8 @@ import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import *
 
-import __init__, export, intro, storage
-from ui.ui_bealuna_eng import Ui_Form
+from draft_survey import calc, export, intro, storage
+from draft_survey.ui.ui_bealuna_eng import Ui_Form
 
 
 class MainWindowEng(QWidget):
@@ -69,7 +69,7 @@ class MainWindowEng(QWidget):
 
         self.ui.result.setText('')
 
-    def calculate(self, draft_lines, stores_lines, density_line) -> (None, tuple):
+    def calculate(self, draft_lines:list, stores_lines, density_line) -> (None, tuple):
         """Функция расчета введенных данных"""
 
         validates_result = self.validate_forms(draft_lines=self.draft_lines, stores_lines=self.stores_lines,
@@ -88,7 +88,7 @@ class MainWindowEng(QWidget):
         params = dict(zip(params_labels, params_values))
 
         # вызов функции расчета с передачей параметров
-        outcome = __init__.calc(params)
+        outcome = calc.calculation(params)
 
         # вывод значений в форму программы
         show_label = (str(outcome[0]) + '; ' + str(outcome[1]) + '; ' +

@@ -4,8 +4,8 @@ import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import *
 
-import __init__, export, intro, storage
-from ui.ui_bealuna_rus import Ui_Form
+from draft_survey import calc, export, intro, storage
+from draft_survey.ui.ui_bealuna_rus import Ui_Form
 
 
 class MainwindowRus(QWidget):
@@ -87,7 +87,7 @@ class MainwindowRus(QWidget):
         params = dict(zip(params_labels, params_values))
 
         # вызов функции расчета с передачей параметров
-        outcome = __init__.calc(params)
+        outcome = calc.calculation(params)
 
         # вывод значений в форму программы
         show_label = (str(outcome[0]) + '; ' + str(outcome[1]) + '; ' +
