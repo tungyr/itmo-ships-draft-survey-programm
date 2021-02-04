@@ -48,5 +48,6 @@ class IntroWindow(QWidget):
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     mainWin = IntroWindow()
+    print(mainWin, type(mainWin))
     mainWin.show()
     sys.exit(app.exec_())
