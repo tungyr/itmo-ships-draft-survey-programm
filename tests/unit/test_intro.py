@@ -4,6 +4,8 @@
 # https://pytest-qt.readthedocs.io/en/latest/reference.html#module-pytestqt.qtbot
 # https://pytest-qt.readthedocs.io/en/latest/intro.html#requirements
 
+# https://stackoverflow.com/questions/57065728/how-to-check-correct-opening-the-window-after-the-click-by-button-in-pytest-qt
+
 import sys
 from PyQt5.QtTest import QTest
 from PyQt5.QtCore import Qt
@@ -12,20 +14,25 @@ from PyQt5 import QtCore
 
 from draft_survey import intro
 
-import pytestqt
+import pytest
 
-# first_test = QTest()
+from draft_survey import intro
 
-# if QTest.mousePress(first_test, intro.bealuna_eng.qDrawWinButton(), ):
-#    print('pressed')
+@pytest.fixture
+def app(qtbot):
+    test_intro_app = intro.IntroWindow()
+    qtbot.addWidget(test_intro_app)  # we are "registering" our app object to qtbot
 
-# QTest.mousePress(intro.mainWin)
+    return test_intro_app
+#
+#
+# def test_label(app):
+#     assert app.text_label.text() == "Hello World!"
 
-def test_hello(qtbot):
-    widget = intro.IntroWindow()
-    qtbot.addWidget(widget)
 
-    qtbot.mouseClick(widget.button_greet, QtCore.Qt.LeftButton)
+def test_letsgo_after_click(app, qtbot):
+    qtbot.mouseClick(app.ui_intro.letsgo_btn, QtCore.Qt.LeftButton)
+    # assert app.main_win.show()
+    assert app.close()
 
-    assert widget.greet_label.text() == "Hello!"
 
