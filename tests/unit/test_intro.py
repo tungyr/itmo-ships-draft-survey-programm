@@ -20,7 +20,7 @@ from draft_survey import intro
 import pytest
 
 from draft_survey import intro
-from draft_survey.widgets import anyvsl_eng, anyvsl_rus, bealuna_eng
+from draft_survey.widgets import anyvsl_eng, anyvsl_rus, bealuna_eng, bealuna_rus
 
 @pytest.fixture
 def app(qtbot):
@@ -36,6 +36,10 @@ def app(qtbot):
 
 def test_letsgo_after_click(app, qtbot):
     qtbot.mouseClick(app.ui_intro.letsgo_btn, QtCore.Qt.LeftButton)
+    qtbot.waitExposed(bealuna_rus.MainwindowRus())
+    qtbot.mouseClick(app.ui_intro.rus_radiobtn, QtCore.Qt.LeftButton)
+    qtbot.mouseClick(app.ui_intro.bealuna_radiobtn, QtCore.Qt.LeftButton)
+
     # assert bealuna_eng.MainWindowEng().show()
     # assert bealuna_eng.MainWindowEng().isActiveWindow()
     #
