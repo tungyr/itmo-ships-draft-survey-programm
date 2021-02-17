@@ -9,6 +9,8 @@
 
 # https://stackoverflow.com/questions/57065728/how-to-check-correct-opening-the-window-after-the-click-by-button-in-pytest-qt
 
+# https://pytest-qt.readthedocs.io/en/latest/reference.html#module-pytestqt.qtbot
+
 import sys
 from PyQt5.QtTest import QTest
 from PyQt5.QtCore import Qt
@@ -36,19 +38,29 @@ def app(qtbot):
 
 def test_letsgo_after_click(app, qtbot):
     qtbot.mouseClick(app.ui_intro.letsgo_btn, QtCore.Qt.LeftButton)
-    qtbot.waitExposed(bealuna_rus.MainwindowRus())
-    qtbot.mouseClick(app.ui_intro.rus_radiobtn, QtCore.Qt.LeftButton)
-    qtbot.mouseClick(app.ui_intro.bealuna_radiobtn, QtCore.Qt.LeftButton)
+    # assert app.vessel_name == "HC Bea-Luna"
+    # qtbot.mouseClick(app.ui_intro.rus_radiobtn, QtCore.Qt.LeftButton)
+    # qtbot.mouseClick(app.ui_intro.bealuna_radiobtn, QtCore.Qt.LeftButton)
+    # qtbot.mouseClick(app.ui_intro.letsgo_btn, QtCore.Qt.LeftButton)
 
     # assert bealuna_eng.MainWindowEng().show()
     # assert bealuna_eng.MainWindowEng().isActiveWindow()
     #
-    assert app.close()
+    # assert app.close()
     # assert app.show()
     # assert app.c is None
     # assert app.focusWidget()
-    qtbot.addWidget(bealuna_eng.MainWindowEng())
+    # qtbot.addWidget(bealuna_eng.MainWindowEng())
 
 # def test_main_window_launch(app, qtbot):
+
+def test_letsgo_diff_widgets(app, qtbot):
+
+    assert app.example == 10
+    qtbot.mouseClick(app.ui_intro.rus_radiobtn, QtCore.Qt.LeftButton)
+    qtbot.mouseClick(app.ui_intro.bealuna_radiobtn, QtCore.Qt.LeftButton)
+    qtbot.mouseClick(app.ui_intro.letsgo_btn, QtCore.Qt.LeftButton)
+
+    assert app.close()
 
 

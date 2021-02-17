@@ -12,6 +12,8 @@ class MainwindowRus(QWidget):
     def __init__(self, parent=None):
         super(MainwindowRus, self).__init__(parent)
 
+        print('BEALUNA_RUS')
+
         self.ui = Ui_Form()   # использование модуля с настройками интерфейса программы
         self.ui.setupUi(self)
 
