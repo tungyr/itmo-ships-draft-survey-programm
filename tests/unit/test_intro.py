@@ -36,7 +36,7 @@ def app(qtbot):
 #     assert app.text_label.text() == "Hello World!"
 
 
-def test_letsgo_after_click(app, qtbot):
+def test_letsgo_click_default_win(app, qtbot):
     qtbot.mouseClick(app.ui_intro.letsgo_btn, QtCore.Qt.LeftButton)
     # assert app.vessel_name == "HC Bea-Luna"
     # qtbot.mouseClick(app.ui_intro.rus_radiobtn, QtCore.Qt.LeftButton)
@@ -52,15 +52,30 @@ def test_letsgo_after_click(app, qtbot):
     # assert app.focusWidget()
     # qtbot.addWidget(bealuna_eng.MainWindowEng())
 
-# def test_main_window_launch(app, qtbot):
+    assert isinstance(app.main_win, bealuna_eng.MainWindowEng) == True
 
-def test_letsgo_diff_widgets(app, qtbot):
-
-    assert app.example == 10
+def test_letsgo_click_bealuna_rus_win(app, qtbot):
     qtbot.mouseClick(app.ui_intro.rus_radiobtn, QtCore.Qt.LeftButton)
     qtbot.mouseClick(app.ui_intro.bealuna_radiobtn, QtCore.Qt.LeftButton)
     qtbot.mouseClick(app.ui_intro.letsgo_btn, QtCore.Qt.LeftButton)
 
+    assert isinstance(app.main_win, bealuna_rus.MainwindowRus) == True
+
+def test_letsgo_click_anyvsl_eng_win(app, qtbot):
+    qtbot.mouseClick(app.ui_intro.eng_radiobtn, QtCore.Qt.LeftButton)
+    qtbot.mouseClick(app.ui_intro.anyvsl_radiobtn, QtCore.Qt.LeftButton)
+    qtbot.mouseClick(app.ui_intro.letsgo_btn, QtCore.Qt.LeftButton)
+
+    assert isinstance(app.main_win, anyvsl_eng.MainWindowEng) == True
+
+def test_letsgo_click_anyvsl_rus_win(app, qtbot):
+    qtbot.mouseClick(app.ui_intro.rus_radiobtn, QtCore.Qt.LeftButton)
+    qtbot.mouseClick(app.ui_intro.anyvsl_radiobtn, QtCore.Qt.LeftButton)
+    qtbot.mouseClick(app.ui_intro.letsgo_btn, QtCore.Qt.LeftButton)
+
+    assert isinstance(app.main_win, anyvsl_rus.MainWindowRus) == True
     assert app.close()
+
+    # assert app.close()
 
 

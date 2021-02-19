@@ -22,6 +22,7 @@ class MainWindowRus(QWidget):
         self.result_momc = ()
         self.result_displ = ()
         self.params = {}
+        print('ANYVSL_RUS')
 
         self.draft_lines = (self.ui.F_ps_line, self.ui.F_ss_line, self.ui.M_ps_line, self.ui.M_ss_line,
                             self.ui.A_ps_line, self.ui.A_ss_line)

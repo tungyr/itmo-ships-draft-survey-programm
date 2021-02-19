@@ -11,6 +11,7 @@ from draft_survey.ui.ui_bealuna_eng import Ui_Form
 class MainWindowEng(QWidget):
     def __init__(self, parent=None):
         super(MainWindowEng, self).__init__(parent)
+
         print('BEALUNA_ENG')
 
         self.ui = Ui_Form()   # использование модуля с настройками интерфейса программы

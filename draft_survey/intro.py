@@ -23,12 +23,11 @@ class IntroWindow(QWidget):
         # запуск основного окна в зависимости от нажатой кнопки
         self.ui_intro.letsgo_btn.clicked.connect(self.launch_main_window)
 
-        self.example = 10
-
     def launch_main_window(self) -> None:
         if self.ui_intro.eng_radiobtn.isChecked() and self.ui_intro.bealuna_radiobtn.isChecked():
             self.main_win = bealuna_eng.MainWindowEng()
             self.main_win.show()
+            print(dir(bealuna_eng.MainWindowEng()))
             self.close()
 
         elif self.ui_intro.rus_radiobtn.isChecked() and self.ui_intro.bealuna_radiobtn.isChecked():
