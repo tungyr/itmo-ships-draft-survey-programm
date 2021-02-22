@@ -4,14 +4,14 @@ import unittest
 # import draft_survey.__init__
 # sys.path.append('draft_survey')
 print('__file__={0:<35} | __name__={1:<20} | __package__={2:<20}'.format(__file__, __name__, str(__package__)))
-from draft_survey.widgets.anyvsl_eng import MainWindowEng
+from draft_survey.widgets.anyvsl_eng import MainWindowAnyvslEng
 
 
 
 class TestMainWindowEng(unittest.TestCase):
 
     def setUp(self):
-        self.window = MainWindowEng()
+        self.window = MainWindowAnyvslEng()
 
     def test1(self):
         self.assertTrue(True)

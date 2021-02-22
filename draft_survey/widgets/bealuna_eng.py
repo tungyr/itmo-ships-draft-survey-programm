@@ -8,9 +8,9 @@ from draft_survey import calc, export, intro, storage
 from draft_survey.ui.ui_bealuna_eng import Ui_Form
 
 
-class MainWindowEng(QWidget):
+class MainWindowBealunaEng(QWidget):
     def __init__(self, parent=None):
-        super(MainWindowEng, self).__init__(parent)
+        super(MainWindowBealunaEng, self).__init__(parent)
 
         print('BEALUNA_ENG')
 
@@ -158,6 +158,6 @@ class MainWindowEng(QWidget):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    mainWin = MainWindowEng()
+    mainWin = MainWindowBealunaEng()
     mainWin.show()
     sys.exit(app.exec_())

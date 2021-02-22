@@ -25,23 +25,22 @@ class IntroWindow(QWidget):
 
     def launch_main_window(self) -> None:
         if self.ui_intro.eng_radiobtn.isChecked() and self.ui_intro.bealuna_radiobtn.isChecked():
-            self.main_win = bealuna_eng.MainWindowEng()
+            self.main_win = bealuna_eng.MainWindowBealunaEng()
             self.main_win.show()
-            print(dir(bealuna_eng.MainWindowEng()))
             self.close()
 
         elif self.ui_intro.rus_radiobtn.isChecked() and self.ui_intro.bealuna_radiobtn.isChecked():
-            self.main_win = bealuna_rus.MainwindowRus()
+            self.main_win = bealuna_rus.MainWindowBealunaRus()
             self.main_win.show()
             self.close()
 
         elif self.ui_intro.eng_radiobtn.isChecked() and self.ui_intro.anyvsl_radiobtn.isChecked():
-            self.main_win = anyvsl_eng.MainWindowEng()
+            self.main_win = anyvsl_eng.MainWindowAnyvslEng()
             self.main_win.show()
             self.close()
 
         elif self.ui_intro.rus_radiobtn.isChecked() and self.ui_intro.anyvsl_radiobtn.isChecked():
-            self.main_win = anyvsl_rus.MainWindowRus()
+            self.main_win = anyvsl_rus.MainWindowAnyvslRus()
             self.main_win.show()
             self.close()
 

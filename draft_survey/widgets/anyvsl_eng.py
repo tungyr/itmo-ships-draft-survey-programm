@@ -13,9 +13,9 @@ from draft_survey import anyvsl_init, export, intro
 from draft_survey.ui.ui_anyvsl_eng import Ui_Form
 
 
-class MainWindowEng(QWidget):
+class MainWindowAnyvslEng(QWidget):
     def __init__(self, parent=None):
-        super(MainWindowEng, self).__init__(parent)
+        super(MainWindowAnyvslEng, self).__init__(parent)
 
         self.ui = Ui_Form()
         self.ui.setupUi(self)
@@ -254,6 +254,6 @@ class MainWindowEng(QWidget):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    mainWin = MainWindowEng()
+    mainWin = MainWindowAnyvslEng()
     mainWin.show()
     sys.exit(app.exec_())

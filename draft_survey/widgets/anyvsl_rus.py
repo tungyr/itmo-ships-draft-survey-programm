@@ -13,9 +13,9 @@ from draft_survey import anyvsl_init, export, intro
 from draft_survey.ui.ui_anyvsl_rus import Ui_Form
 
 
-class MainWindowRus(QWidget):
+class MainWindowAnyvslRus(QWidget):
     def __init__(self, parent=None):
-        super(MainWindowRus, self).__init__(parent)
+        super(MainWindowAnyvslRus, self).__init__(parent)
 
         self.ui = Ui_Form()
         self.ui.setupUi(self)
@@ -253,6 +253,6 @@ class MainWindowRus(QWidget):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    mainWin = MainWindowRus()
+    mainWin = MainWindowAnyvslRus()
     mainWin.show()
     sys.exit(app.exec_())
