@@ -12,8 +12,6 @@ class MainWindowBealunaEng(QWidget):
     def __init__(self, parent=None):
         super(MainWindowBealunaEng, self).__init__(parent)
 
-        print('BEALUNA_ENG')
-
         self.ui = Ui_Form()   # использование модуля с настройками интерфейса программы
         self.ui.setupUi(self)
 

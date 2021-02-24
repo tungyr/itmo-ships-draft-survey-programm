@@ -1,16 +1,3 @@
-# http://johnnado.com/pyqt-qtest-example/
-# https://www.riverbankcomputing.com/static/Docs/PyQt5/
-# https://github.com/pytest-dev/pytest-qt
-# https://pytest-qt.readthedocs.io/en/latest/reference.html#module-pytestqt.qtbot
-# https://pytest-qt.readthedocs.io/en/latest/intro.html#requirements
-
-# https://pytest-qt.readthedocs.io/en/latest/_modules/pytestqt/qtbot.html
-# https://pytest-qt.readthedocs.io/en/latest/tutorial.html
-
-# https://stackoverflow.com/questions/57065728/how-to-check-correct-opening-the-window-after-the-click-by-button-in-pytest-qt
-
-# https://pytest-qt.readthedocs.io/en/latest/reference.html#module-pytestqt.qtbot
-
 import pytest
 from PyQt5 import QtCore
 
